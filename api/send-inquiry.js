@@ -123,7 +123,7 @@ For questions, we'll contact you directly soon.
       },
       body: JSON.stringify({
         from: 'noreply@housecallforkids.com',
-        to: ['info@housecallforkids.com'], // Update with actual practice email
+        to: ['ADHD@1to1Pediatrics.com'], // Practice email
         subject: `New Patient Inquiry: ${patientName}`,
         html: practiceEmailContent.replace(/\n/g, '<br>'),
         text: practiceEmailContent,
@@ -149,7 +149,7 @@ For questions, we'll contact you directly soon.
         subject: 'Your Inquiry Confirmation - HouseCall for Kids',
         html: confirmationEmailContent.replace(/\n/g, '<br>'),
         text: confirmationEmailContent,
-        replyTo: 'info@housecallforkids.com' // Update with actual practice email
+        replyTo: 'ADHD@1to1Pediatrics.com' // Practice email
       })
     });
 
