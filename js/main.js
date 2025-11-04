@@ -91,4 +91,104 @@ const skipLinkStyles = `
 
 document.head.insertAdjacentHTML('beforeend', skipLinkStyles);
 
+// Patient Inquiry Form Handler
+function initializePatientInquiryForm() {
+    const form = document.getElementById('patientInquiryForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoading = submitBtn.querySelector('.btn-loading');
+        const formMessage = document.getElementById('formMessage');
+
+        // Show loading state
+        submitBtn.disabled = true;
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'flex';
+        formMessage.style.display = 'none';
+
+        try {
+            // Collect form data
+            const formData = new FormData(form);
+            const inquiryData = {
+                parentName: formData.get('parentName'),
+                phoneNumber: formData.get('phoneNumber'),
+                email: formData.get('email'),
+                patientName: formData.get('patientName'),
+                dateOfBirth: formData.get('dateOfBirth'),
+                californiaResident: formData.get('californiaResident'),
+                concerns: formData.get('concerns'),
+                afterHours: formData.get('afterHours') === 'yes' ? 'Yes' : 'No',
+                questions: formData.get('questions') === 'yes' ? 'Yes' : 'No',
+                submittedAt: new Date().toISOString()
+            };
+
+            // Validation
+            if (!inquiryData.parentName || !inquiryData.phoneNumber || !inquiryData.email ||
+                !inquiryData.patientName || !inquiryData.dateOfBirth || !inquiryData.concerns) {
+                throw new Error('Please fill in all required fields.');
+            }
+
+            if (inquiryData.californiaResident !== 'yes') {
+                throw new Error('At this time, we only serve California residents. Please check back if our service area expands.');
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(inquiryData.email)) {
+                throw new Error('Please enter a valid email address.');
+            }
+
+            // Send inquiry
+            await sendPatientInquiry(inquiryData);
+
+            // Success message
+            formMessage.innerHTML = `
+                <strong>🎉 Thank you for your inquiry!</strong><br><br>
+                We've received your information and will contact you soon about our Early January 2026 launch.<br>
+                You're now on our priority list for HouseCall for Kids virtual pediatric urgent care services.
+            `;
+            formMessage.className = 'form-message success';
+            formMessage.style.display = 'block';
+            form.reset();
+
+        } catch (error) {
+            // Error message
+            formMessage.innerHTML = `<strong>❌ Error:</strong> ${error.message}`;
+            formMessage.className = 'form-message error';
+            formMessage.style.display = 'block';
+        } finally {
+            // Reset loading state
+            submitBtn.disabled = false;
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
+        }
+    });
+}
+
+async function sendPatientInquiry(data) {
+    const response = await fetch('/api/send-inquiry', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to send inquiry. Please try again.');
+    }
+
+    return response.json();
+}
+
+// Initialize form when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializePatientInquiryForm();
+});
+
 console.log('HouseCall for Kids website loaded successfully!');

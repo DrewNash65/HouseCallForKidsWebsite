@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HouseCall for Kids - Pediatric Urgent Care at Home</title>
-    <meta name="description" content="HouseCall for Kids provides pediatric urgent care services brought directly to your home. Trusted, convenient care when your child needs it most.">
+    <title>HouseCall for Kids - Online Pediatric Urgent Care</title>
+    <meta name="description" content="HouseCall for Kids provides virtual pediatric urgent care services online. Get trusted medical care for your child from the comfort of home via video visits.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
@@ -20,10 +21,10 @@
                 </div>
                 <ul class="nav-menu">
                     <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#inquiry" class="nav-link">Get Started</a></li>
                     <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="pricing.html" class="nav-link">Pricing</a></li>
                     <li class="nav-item"><a href="faq.html" class="nav-link">FAQ</a></li>
-                    <li class="nav-item"><a href="patient-portal.html" class="nav-link">Patient Portal</a></li>
                 </ul>
                 <div class="nav-toggle">
                     <span class="bar"></span>
@@ -37,11 +38,11 @@
     <main>
         <section id="home" class="hero">
             <div class="hero-content">
-                <h2 class="hero-title">Pediatric Urgent Care at Your Doorstep</h2>
-                <p class="hero-subtitle">When your child needs urgent medical care, we bring compassionate, professional care directly to your home</p>
+                <h2 class="hero-title">Virtual Pediatric Urgent Care</h2>
+                <p class="hero-subtitle">Get trusted medical care for your child online via video visits. No travel, no waiting rooms - just expert pediatric care from home.</p>
                 <div class="hero-buttons">
                     <a href="#about" class="btn btn-primary">Learn More</a>
-                    <a href="#contact" class="btn btn-secondary">Contact Us</a>
+                    <a href="patient-portal.html" class="btn btn-secondary">Book Visit</a>
                 </div>
             </div>
         </section>
@@ -49,31 +50,141 @@
         <section id="services" class="services">
             <div class="container">
                 <h2 class="section-title">Our Services</h2>
+                <div class="launch-announcement">
+                    <h3>🚀 Launching Early January 2026</h3>
+                    <p>We're now accepting inquiries for our virtual pediatric urgent care practice. Reserve your spot and be among the first families to access our services!</p>
+                </div>
                 <div class="services-grid">
                     <div class="service-card">
-                        <div class="card-icon">🏠</div>
-                        <h3>Home Visits</h3>
-                        <p>Pediatric urgent care services brought directly to your home</p>
+                        <div class="card-icon">💻</div>
+                        <h3>Video Visits</h3>
+                        <p>Virtual pediatric urgent care via secure video consultations</p>
                         <a href="about.html" class="card-link">Learn More →</a>
                     </div>
                     <div class="service-card">
-                        <div class="card-icon">👶</div>
-                        <h3>Child Care</h3>
-                        <p>Specialized medical care for children of all ages</p>
-                        <a href="about.html" class="card-link">Learn More →</a>
+                        <div class="card-icon">🤒</div>
+                        <h3>Sick Visit Care</h3>
+                        <p>Treatment for URIs, ear infections, coughs, fever, and more</p>
+                        <a href="pricing.html" class="card-link">View Pricing →</a>
                     </div>
                     <div class="service-card">
-                        <div class="card-icon">⏰</div>
-                        <h3>24/7 Availability</h3>
-                        <p>Around-the-clock urgent care when you need it most</p>
-                        <a href="contact.html" class="card-link">Contact Us →</a>
+                        <div class="card-icon">🧠</div>
+                        <h3>Behavioral Support</h3>
+                        <p>Guidance for sleep issues, tantrums, and parenting concerns</p>
+                        <a href="about.html" class="card-link">Learn More →</a>
                     </div>
                     <div class="service-card">
                         <div class="card-icon">💊</div>
-                        <h3>Medication Management</h3>
-                        <p>Prescription and medication services for urgent needs</p>
+                        <h3>Prescription Services</h3>
+                        <p>Electronic prescriptions sent to your preferred pharmacy</p>
                         <a href="pricing.html" class="card-link">View Pricing →</a>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="inquiry" class="inquiry-section">
+            <div class="container">
+                <h2 class="section-title">Get Early Access</h2>
+                <p class="section-subtitle">Reserve your spot for our Early January 2026 launch. Limited spots available!</p>
+
+                <div class="eligibility-info">
+                    <div class="eligibility-card">
+                        <h3>📍 Practice Area</h3>
+                        <p>Serving California residents only</p>
+                    </div>
+                    <div class="eligibility-card">
+                        <h3>👶 Age Range</h3>
+                        <p>Patients 17 years and under</p>
+                    </div>
+                    <div class="eligibility-card">
+                        <h3>⏰ Launch Timeline</h3>
+                        <p>Early January 2026</p>
+                    </div>
+                </div>
+
+                <div class="inquiry-form-container">
+                    <h3>Reserve Your Spot Today</h3>
+                    <form id="patientInquiryForm" class="inquiry-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="parentName">Parent/Guardian Name *</label>
+                                <input type="text" id="parentName" name="parentName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number *</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="patientName">Patient's Name *</label>
+                                <input type="text" id="patientName" name="patientName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dateOfBirth">Date of Birth *</label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="californiaResident">California Resident *</label>
+                                <select id="californiaResident" name="californiaResident" required>
+                                    <option value="">Please select</option>
+                                    <option value="yes">Yes, I am a California resident</option>
+                                    <option value="no">No, I am not a California resident</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="concerns">What brings you to our practice? *</label>
+                                <textarea id="concerns" name="concerns" rows="4" required placeholder="Please briefly describe why you're interested in our virtual pediatric urgent care services..."></textarea>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="afterHours">I'm interested in:</label>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="afterHours" value="yes">
+                                        <span class="checkmark"></span>
+                                        After-hours appointments
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="questions" value="yes">
+                                        <span class="checkmark"></span>
+                                        Practice information and general questions
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-notice">
+                            <p><strong>Important Notice:</strong> By submitting this form, you understand that:</p>
+                            <ul>
+                                <li>Our practice launches Early January 2026</li>
+                                <li>We only serve California residents (patients 17 years and under)</li>
+                                <li>This is an inquiry form, not emergency medical care</li>
+                                <li>For medical emergencies, call 911 or visit your nearest emergency room</li>
+                            </ul>
+                            <p><strong>HIPAA Notice:</strong> This form collects protected health information. By submitting, you consent to our use of this information to contact you about our practice launch and services.</p>
+                        </div>
+
+                        <div class="form-submit">
+                            <button type="submit" class="btn btn-primary btn-large">
+                                <span class="btn-text">Reserve My Spot</span>
+                                <span class="btn-loading" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i> Sending...
+                                </span>
+                            </button>
+                        </div>
+
+                        <div id="formMessage" class="form-message" style="display: none;"></div>
+                    </form>
                 </div>
             </div>
         </section>
@@ -83,13 +194,13 @@
                 <div class="about-content">
                     <div class="about-text">
                         <h2>About HouseCall for Kids</h2>
-                        <p>HouseCall for Kids provides compassionate, professional pediatric urgent care services in the comfort of your home. Our experienced medical team is dedicated to ensuring your child receives the best possible care when they need it most.</p>
-                        <p>We understand that visiting an emergency room or urgent care clinic can be stressful for both children and parents. That's why we bring high-quality medical care directly to you.</p>
+                        <p>HouseCall for Kids provides convenient, professional pediatric urgent care services through secure video visits. Our experienced medical team is dedicated to ensuring your child receives expert medical care from the comfort of your home.</p>
+                        <p>We understand that visiting emergency rooms or urgent care clinics can be stressful and time-consuming. That's why we offer virtual visits that connect you with pediatric specialists quickly and safely.</p>
                         <a href="about.html" class="btn btn-primary">Learn More About Us</a>
                     </div>
                     <div class="about-image">
                         <div class="image-placeholder">
-                            <span>👨‍⚕️</span>
+                            <span>💻</span>
                         </div>
                     </div>
                 </div>
@@ -103,16 +214,16 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>HouseCall for Kids</h3>
-                    <p>Pediatric urgent care brought to your home.</p>
+                    <p>Virtual pediatric urgent care via video visits.</p>
                 </div>
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="index.html">Home</a></li>
+                        <li><a href="#inquiry">Get Started</a></li>
                         <li><a href="about.html">About</a></li>
                         <li><a href="pricing.html">Pricing</a></li>
                         <li><a href="faq.html">FAQ</a></li>
-                        <li><a href="patient-portal.html">Patient Portal</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
