@@ -122,7 +122,7 @@ For questions, we'll contact you directly soon.
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'noreply@housecallforkids.com',
+        from: 'noreply@1to1pediatrics.com',
         to: ['ADHD@1to1Pediatrics.com'], // Practice email
         subject: `New Patient Inquiry: ${patientName}`,
         html: practiceEmailContent.replace(/\n/g, '<br>'),
@@ -144,7 +144,7 @@ For questions, we'll contact you directly soon.
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'noreply@housecallforkids.com',
+        from: 'noreply@1to1pediatrics.com',
         to: [email],
         subject: 'Your Inquiry Confirmation - HouseCall for Kids',
         html: confirmationEmailContent.replace(/\n/g, '<br>'),
