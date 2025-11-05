@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <!-- Background -->
+  <rect width="200" height="60" fill="#20B2AA" rx="8"/>
+
+  <!-- Logo Elements - Simplified medical cross and child silhouette -->
+  <g transform="translate(10, 5)">
+    <!-- Medical Cross -->
+    <rect x="5" y="15" width="20" height="6" fill="white" rx="1"/>
+    <rect x="12" y="8" width="6" height="20" fill="white" rx="1"/>
+
+    <!-- House Icon -->
+    <g transform="translate(35, 10)">
+      <path d="M0 15 L8 8 L16 15 L16 22 L0 22 Z" fill="white"/>
+      <rect x="6" y="18" width="4" height="4" fill="#20B2AA"/>
+    </g>
+
+    <!-- Kid Icon -->
+    <g transform="translate(55, 8)">
+      <circle cx="8" cy="8" r="6" fill="white"/>
+      <path d="M2 14 Q8 12 14 14 L14 20 Q8 22 2 20 Z" fill="white"/>
+      <circle cx="6" cy="8" r="1" fill="#20B2AA"/>
+      <circle cx="10" cy="8" r="1" fill="#20B2AA"/>
+    </g>
+  </g>
+
+  <!-- Text -->
+  <text x="85" y="25" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">HouseCall</text>
+  <text x="85" y="42" font-family="Arial, sans-serif" font-size="12" fill="white">for Kids</text>
+</svg>

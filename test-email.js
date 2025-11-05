@@ -23,7 +23,7 @@ async function testEmailFunctionality() {
         console.log('👶 Patient:', testData.patientName);
         console.log('📧 Email:', testData.email);
         console.log('📱 Phone:', testData.phoneNumber);
-        console.log('📍 California Resident:', testData.californiaResident);
+        console.log('📍 Located in California:', testData.californiaResident);
         console.log('📝 Concerns:', testData.concerns);
         console.log('');
 

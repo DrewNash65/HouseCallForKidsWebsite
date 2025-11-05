@@ -17,7 +17,7 @@ Use the following test data:
 - **Email Address:** [Use your real email address for testing]
 - **Patient's Name:** Test Child
 - **Date of Birth:** 05/15/2020
-- **California Resident:** Yes, I am a California resident
+- **Located in California:** Yes, I am located in California
 - **What brings you to our practice:** Test inquiry - interested in virtual pediatric urgent care services for my child.
 - **I'm interested in:**
   - ✅ After-hours appointments
@@ -56,7 +56,7 @@ PARENT/GUARDIAN INFORMATION:
 PATIENT INFORMATION:
 • Name: Test Child
 • Date of Birth: 2020-05-15
-• California Resident: Yes
+• Located in California: Yes
 
 INQUIRY DETAILS:
 • Concerns: Test inquiry - interested in virtual pediatric urgent care services for my child.

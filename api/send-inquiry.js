@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     // California residency validation
     if (californiaResident !== 'yes') {
       return res.status(400).json({
-        error: 'At this time, we only serve California residents. Please check back if our service area expands.'
+        error: 'At this time, we only serve patients located in California. Please check back if our service area expands.'
       });
     }
 
@@ -55,7 +55,7 @@ PARENT/GUARDIAN INFORMATION:
 PATIENT INFORMATION:
 • Name: ${patientName}
 • Date of Birth: ${dateOfBirth}
-• California Resident: ${californiaResident === 'yes' ? 'Yes' : 'No'}
+• Located in California: ${californiaResident === 'yes' ? 'Yes' : 'No'}
 
 INQUIRY DETAILS:
 • Concerns: ${concerns}
@@ -92,7 +92,7 @@ YOUR INQUIRY DETAILS:
 
 IMPORTANT REMINDERS:
 • Our practice launches Early January 2026
-• We serve California residents (patients 17 years and under)
+• We serve patients located in California (patients 17 years and under)
 • This is not emergency medical care
 • For medical emergencies, call 911 or visit your nearest emergency room
 

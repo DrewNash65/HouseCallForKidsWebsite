@@ -133,7 +133,7 @@ function initializePatientInquiryForm() {
             }
 
             if (inquiryData.californiaResident !== 'yes') {
-                throw new Error('At this time, we only serve California residents. Please check back if our service area expands.');
+                throw new Error('At this time, we only serve patients located in California. Please check back if our service area expands.');
             }
 
             // Email validation

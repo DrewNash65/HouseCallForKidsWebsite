@@ -112,6 +112,111 @@ a:hover {
     transform: scale(1.05);
 }
 
+/* Dual Logo Container for Header */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-img-1to1 {
+    height: 90px;
+    width: auto;
+    transition: var(--transition);
+}
+
+.logo-img-chatgpt {
+    height: 85px;
+    width: auto;
+    transition: var(--transition);
+}
+
+.logo-img-1to1:hover,
+.logo-img-chatgpt:hover {
+    transform: scale(1.05);
+}
+
+/* Prominent ChatGPT logo for homepage */
+.prominent-logo-section {
+    text-align: center;
+    padding: 3rem 0 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.prominent-logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.prominent-logo-img {
+    width: 600px;
+    height: 600px;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.3));
+    transition: transform 0.3s ease;
+}
+
+.prominent-logo-img:hover {
+    transform: scale(1.05);
+}
+
+.logo-partner-text {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+/* Responsive Design for Logos */
+@media (max-width: 768px) {
+    .logo-container {
+        gap: 0.3rem;
+    }
+
+    .logo-img-1to1 {
+        height: 80px;
+    }
+
+    .logo-img-chatgpt {
+        height: 75px;
+    }
+
+    .prominent-logo-container {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .prominent-logo-img {
+        width: 400px;
+        height: 400px;
+    }
+
+    .logo-partner-text {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-img-1to1 {
+        height: 60px;
+    }
+
+    .logo-img-chatgpt {
+        height: 55px;
+    }
+
+    .prominent-logo-img {
+        width: 400px;
+        height: 400px;
+    }
+
+    .logo-partner-text {
+        font-size: 0.9rem;
+    }
+}
+
 .nav-logo h1 {
     font-size: 1.5rem;
     margin-bottom: 0;
@@ -182,10 +287,31 @@ a:hover {
     padding: 0 20px;
 }
 
+.hero-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.hero-logo-img {
+    width: 600px;
+    height: 600px;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.3));
+    transition: transform 0.3s ease;
+}
+
+.hero-logo-img:hover {
+    transform: scale(1.05);
+}
+
 .hero-title {
     font-size: 3rem;
     font-weight: 700;
-    margin-bottom: 1.5rem;
+    margin: 0;
     color: white;
 }
 
@@ -311,6 +437,15 @@ section {
 
 .card-link:hover {
     gap: 0.75rem;
+}
+
+/* Service Cards Grid */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* Service Cards - same styling as resource cards */
@@ -863,10 +998,6 @@ section {
 
 /* About Section */
 .about-content {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 4rem;
-    align-items: center;
     margin-top: 3rem;
 }
 
@@ -961,8 +1092,24 @@ section {
         display: flex;
     }
 
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .hero-header {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .hero-logo-img {
+        width: 400px;
+        height: 400px;
+    }
+
     .hero-title {
         font-size: 2rem;
+        text-align: center;
     }
 
     .hero-subtitle {
@@ -974,11 +1121,7 @@ section {
         align-items: center;
     }
 
-    .about-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-
+    
     .section-title {
         font-size: 2rem;
     }
@@ -1006,8 +1149,14 @@ section {
         padding: 60px 0;
     }
 
+    .hero-logo-img {
+        width: 300px;
+        height: 300px;
+    }
+
     .hero-title {
         font-size: 1.75rem;
+        text-align: center;
     }
 
     h1 {
@@ -1064,3 +1213,370 @@ html {
 .mt-2 { margin-top: 1rem; }
 .mt-3 { margin-top: 1.5rem; }
 .mt-4 { margin-top: 2rem; }
+
+/* About Page Specific Styles */
+.about-content {
+    padding: 4rem 0;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about-hero {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.about-hero h2 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.about-hero h3 {
+    font-size: 1.5rem;
+    color: var(--text-light);
+    font-weight: 400;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+}
+
+.doctor-profile {
+    margin-bottom: 3rem;
+}
+
+.doctor-profile h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.doctor-photo {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.doctor-photo img {
+    width: 350px;
+    height: 450px;
+    border-radius: 20px;
+    object-fit: cover;
+    object-position: top center;
+    border: 5px solid var(--primary-color);
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition);
+}
+
+.doctor-photo img:hover {
+    transform: scale(1.02);
+    border-color: var(--secondary-color);
+}
+
+.profile-section {
+    margin-bottom: 2.5rem;
+}
+
+.profile-section h4 {
+    font-size: 1.3rem;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-section h4::before {
+    content: "🩺";
+    font-size: 1.2rem;
+}
+
+.profile-section p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-dark);
+}
+
+.philosophy-section {
+    margin-bottom: 3rem;
+}
+
+.philosophy-section h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* Philosophy Grid */
+.philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Expertise Grid */
+.expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.philosophy-item {
+    background: var(--bg-light);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 0;
+    border-left: 4px solid var(--accent-color);
+    transition: var(--transition);
+}
+
+.philosophy-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.philosophy-item h4 {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.philosophy-item p {
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.expertise-section {
+    margin-bottom: 3rem;
+}
+
+.expertise-section h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.expertise-item {
+    background: var(--bg-white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 0;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.limitations-item {
+    margin-bottom: 0;
+    border-left: 4px solid var(--warning-color, #f39c12);
+}
+
+.expertise-item:hover {
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.expertise-item h4 {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.expertise-item p {
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.education-section {
+    margin-bottom: 3rem;
+}
+
+.education-item {
+    background: var(--bg-light);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--secondary-color);
+    transition: var(--transition);
+}
+
+.education-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.education-section h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.education-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: var(--bg-light);
+    border-radius: var(--border-radius);
+}
+
+.education-item h4 {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    flex-shrink: 0;
+    min-width: 60px;
+}
+
+.education-item p {
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.approach-section {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 3rem;
+    text-align: left;
+}
+
+.approach-section h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.approach-section p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.cta-button {
+    margin-top: 2rem;
+}
+
+.practice-info {
+    margin-bottom: 2rem;
+}
+
+.practice-info h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.info-item {
+    background: var(--bg-white);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.info-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-color);
+}
+
+.info-item h4 {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.info-item p {
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* Responsive Design for About Page */
+@media (max-width: 768px) {
+    .about-hero h2 {
+        font-size: 2rem;
+    }
+
+    .about-hero h3 {
+        font-size: 1.2rem;
+    }
+
+    .doctor-profile h3,
+    .philosophy-section h3,
+    .expertise-section h3,
+    .education-section h3,
+    .practice-info h3 {
+        font-size: 1.5rem;
+    }
+
+    .doctor-photo img {
+        width: 280px;
+        height: 360px;
+    }
+
+    .approach-section {
+        padding: 2rem 1rem;
+    }
+
+    .philosophy-item,
+    .expertise-item,
+    .education-item,
+    .info-item {
+        padding: 1.5rem;
+    }
+
+    .philosophy-grid,
+    .expertise-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+  
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-content {
+        padding: 2rem 0;
+    }
+
+    .doctor-photo img {
+        width: 240px;
+        height: 320px;
+    }
+
+    .philosophy-item,
+    .expertise-item,
+    .education-item {
+        padding: 1rem;
+    }
+
+    .approach-section {
+        padding: 1.5rem 1rem;
+    }
+}
