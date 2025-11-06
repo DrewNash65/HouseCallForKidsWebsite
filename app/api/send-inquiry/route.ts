@@ -53,7 +53,6 @@ export async function POST(request: Request) {
 
     const confirmationEmailContent = buildConfirmationEmail({
       parentName,
-      email,
       patientName,
       dateOfBirth,
       concerns
@@ -199,7 +198,6 @@ function buildConfirmationEmail({
   concerns
 }: {
   parentName: string;
-  email: string;
   patientName: string;
   dateOfBirth: string;
   concerns: string;
