@@ -23,7 +23,10 @@ export function InquirySection() {
       californiaResident: formData.get('californiaResident'),
       concerns: formData.get('concerns')?.toString().trim() ?? '',
       afterHours: formData.getAll('afterHours').includes('yes') ? 'Yes' : 'No',
-      questions: formData.getAll('questions').includes('yes') ? 'Yes' : 'No'
+      questions: formData.getAll('questions').includes('yes') ? 'Yes' : 'No',
+      pcpName: formData.get('pcpName')?.toString().trim() ?? '',
+      pcpPhone: formData.get('pcpPhone')?.toString().trim() ?? '',
+      pcpFax: formData.get('pcpFax')?.toString().trim() ?? ''
     };
 
     if (payload.californiaResident !== 'yes') {
@@ -84,6 +87,15 @@ export function InquirySection() {
             />
           </div>
 
+          <div className="space-y-6 md:col-span-2">
+            <h3 className="font-heading text-lg text-white">Primary Care Provider Information</h3>
+            <div className="grid gap-6 md:grid-cols-3">
+              <Field label="PCP name" name="pcpName" placeholder="Dr. Smith (optional)" required={false} />
+              <Field label="PCP phone" name="pcpPhone" type="tel" placeholder="(555) 123-4567 (optional)" required={false} />
+              <Field label="PCP fax" name="pcpFax" type="tel" placeholder="(555) 123-4568 (optional)" required={false} />
+            </div>
+          </div>
+
           <TextareaField
             label="How can we support your family?"
             name="concerns"
@@ -138,21 +150,26 @@ function Field({
   label,
   name,
   type = 'text',
-  autoComplete
+  autoComplete,
+  placeholder,
+  required = true
 }: {
   label: string;
   name: string;
   type?: string;
   autoComplete?: string;
+  placeholder?: string;
+  required?: boolean;
 }) {
   return (
     <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
       {label}
       <input
-        required
+        required={required}
         name={name}
         type={type}
         autoComplete={autoComplete}
+        placeholder={placeholder}
         className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
       />
     </label>
