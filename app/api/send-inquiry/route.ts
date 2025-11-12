@@ -51,7 +51,10 @@ export async function POST(request: Request) {
       concerns,
       afterHours,
       questions,
-      submittedAt
+      submittedAt,
+      pcpName,
+      pcpPhone,
+      pcpFax
     });
 
     const confirmationEmailContent = buildConfirmationEmail({
