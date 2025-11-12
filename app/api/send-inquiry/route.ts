@@ -20,7 +20,10 @@ export async function POST(request: Request) {
       concerns,
       afterHours,
       questions,
-      submittedAt
+      submittedAt,
+      pcpName,
+      pcpPhone,
+      pcpFax
     } = body;
 
     if (!parentName || !phoneNumber || !email || !patientName || !dateOfBirth || !concerns) {
@@ -159,7 +162,10 @@ function buildPracticeEmail(fields: Record<string, string>) {
     californiaResident,
     concerns,
     afterHours,
-    questions
+    questions,
+    pcpName,
+    pcpPhone,
+    pcpFax
   } = fields;
 
   return `
@@ -174,6 +180,11 @@ PATIENT INFORMATION:
 • Name: ${patientName}
 • Date of Birth: ${dateOfBirth}
 • Located in California: ${californiaResident === 'yes' ? 'Yes' : 'No'}
+
+PRIMARY CARE PROVIDER:
+• PCP Name: ${pcpName || 'Not provided'}
+• PCP Phone: ${pcpPhone || 'Not provided'}
+• PCP Fax: ${pcpFax || 'Not provided'}
 
 INQUIRY DETAILS:
 • Concerns: ${concerns}
