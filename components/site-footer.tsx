@@ -17,7 +17,7 @@ export function SiteFooter() {
             <li><Link className="hover:text-white" href="/about">Our Story</Link></li>
             <li><Link className="hover:text-white" href="/pricing">Pricing</Link></li>
             <li><Link className="hover:text-white" href="/faq">FAQs</Link></li>
-            <li><Link className="hover:text-white" href="/patient-portal">Patient Portal</Link></li>
+            <li><Link className="hover:text-white" href="https://one-to-one-pediatrics.prd.opencoreemr.com/portal/">Patient Portal</Link></li>
           </ul>
         </div>
         <div>

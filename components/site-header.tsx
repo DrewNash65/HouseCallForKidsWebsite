@@ -11,7 +11,7 @@ const navigation = [
   { name: 'About', href: '/about' },
   { name: 'Pricing', href: '/pricing' },
   { name: 'FAQ', href: '/faq' },
-  { name: 'Patient Portal', href: '/patient-portal' }
+  { name: 'Patient Portal', href: 'https://one-to-one-pediatrics.prd.opencoreemr.com/portal/' }
 ];
 
 export function SiteHeader() {
@@ -49,10 +49,10 @@ export function SiteHeader() {
             </Link>
           ))}
           <Link
-            href="/patient-portal"
+            href="/#inquiry"
             className="ml-4 inline-flex items-center rounded-full bg-brand-base/20 px-4 py-2 text-sm font-semibold text-teal-50 ring-1 ring-brand-base/40 transition hover:-translate-y-0.5 hover:bg-brand-base/30"
           >
-            Book a Visit
+            Pre-Register as a Patient
           </Link>
         </nav>
 
@@ -88,11 +88,11 @@ export function SiteHeader() {
             </Link>
           ))}
           <Link
-            href="/patient-portal"
+            href="/#inquiry"
             onClick={() => setOpen(false)}
             className="btn-pill-primary mt-1 text-center"
           >
-            Book a Visit
+            Pre-Register as a Patient
           </Link>
         </div>
       </div>

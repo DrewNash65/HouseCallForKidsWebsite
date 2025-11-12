@@ -28,12 +28,7 @@ const faqs = [
     answer:
       'We operate as an out-of-network practice. Payment is collected at the time of service, and we provide a detailed receipt to submit to your insurance or HSA/FSA plan.'
   },
-  {
-    question: 'Can we message you after a visit?',
-    answer:
-      'Yes. Every visit includes secure portal messaging for clarifying questions. Extended visits also include a scheduled check-in from our team.'
-  },
-  {
+    {
     question: 'What if we need in-person evaluation?',
     answer:
       'If an in-person exam becomes necessary, we’ll help you transition smoothly with documentation for urgent care or your pediatrician.'
@@ -93,10 +88,9 @@ export default function PricingPage() {
             </p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-sm text-slate-200">
-            <p className="font-heading text-lg text-white">Visit follow-ups</p>
+            <p className="font-heading text-lg text-white">Patient Portal</p>
             <p className="mt-3">
-              Every visit includes at least one follow-up check-in within 48 hours, plus portal messaging
-              for quick questions.
+              Once registered as a patient, you will have access to our patient portal where you can request appointments, view visit summaries, and even pay your bill.
             </p>
           </div>
         </div>
@@ -116,7 +110,7 @@ export default function PricingPage() {
         <div className="rounded-3xl border border-brand-base/30 bg-brand-base/10 p-8 shadow-gentle">
           <h2 className="font-heading text-3xl text-white">Still have questions?</h2>
           <p className="mt-4 text-base text-slate-200">
-            Send us a note at <a className="underline" href="mailto:hello@housecallforkids.com">hello@housecallforkids.com</a>
+            Send us a note at <a className="underline" href="mailto:HouseCallForKids@Gmail.com">HouseCallForKids@Gmail.com</a>
             and we&apos;ll walk through coverage, paperwork, and anything else you need.
           </p>
         </div>

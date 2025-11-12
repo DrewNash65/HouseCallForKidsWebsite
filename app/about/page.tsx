@@ -25,7 +25,7 @@ const values = [
   },
   {
     label: 'Accessible from anywhere in CA',
-    details: 'Secure telehealth supported by HIPAA-compliant tools and bilingual resources.'
+    details: 'Secure telehealth supported by HIPAA-compliant tools and evidence-based medicine.'
   },
   {
     label: 'Continuity you can feel',
@@ -100,8 +100,8 @@ export default function AboutPage() {
             Schedule a welcome call or reserve an early access visit so we can walk through your
             family’s needs together.
           </p>
-          <a href="/patient-portal" className="btn-pill-primary mt-6 inline-flex">
-            Visit the patient portal
+          <a href="/#inquiry" className="btn-pill-primary mt-6 inline-flex">
+            Pre-register Your Child
           </a>
         </div>
       </section>
