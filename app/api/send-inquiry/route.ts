@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     });
 
     await sendEmail({
-      to: ['HouseCallForKids@Gmail.com'],
+      to: ['Drew@1to1Pediatrics.com'],
       subject: `New Patient Inquiry: ${patientName}`,
       text: practiceEmailContent,
       html: practiceEmailContent.replace(/\n/g, '<br>'),
