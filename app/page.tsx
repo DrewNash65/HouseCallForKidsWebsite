@@ -1,6 +1,7 @@
 import { Hero } from '@/components/hero';
 import { InquirySection } from '@/components/inquiry-section';
 import { ServicesSection } from '@/components/services-section';
+import { HowItWorks } from '@/components/how-it-works';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -28,6 +29,7 @@ export default function HomePage() {
       <Hero />
       <SupportStats />
       <ServicesSection />
+      <HowItWorks />
       <CareStory />
       <InquirySection />
       <section className="mx-auto mt-24 max-w-6xl px-6 lg:px-10">
