@@ -4,7 +4,7 @@ export function HowItWorks() {
     "You will be sent credentials to log in to your patient portal as well as a secure link to enter credit card or HSA card information with our partner Stripe. (We don't collect or keep any of your financial information, ever.)",
     "When you would like an appointment, log into the patient portal and select a time that works for you.",
     "Your credit card will be charged a $50 deposit to secure the appointment time. (Your appointment is not confirmed until the deposit is paid.)",
-    "Log in through the secure link to have your appointment.",
+    "Prior to your appointment, you will be sent a secure link to connect via a HIPAA compliant Telehealth platform. You may use a phone, tablet or computer with a camera and microphone.",
     "After the appointment, your card will be charged the balance due (total less deposit paid) and you will be sent a receipt to submit to your insurance company or HSA."
   ];
 
