@@ -20,6 +20,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${manrope.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-PFHS5CX80E"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-PFHS5CX80E');`
+          }}
+        />
+      </head>
       <body className="bg-midnight text-slate-100">
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
