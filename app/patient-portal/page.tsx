@@ -41,38 +41,32 @@ export default function PatientPortalPage() {
             </div>
           </div>
 
-          <form className="glass-card space-y-5 p-6" aria-labelledby="portal-login">
-            <h2 id="portal-login" className="font-heading text-2xl text-white">
-              Returning families
-            </h2>
-            <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-              Email
-              <input
-                type="email"
-                required
-                className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
-              />
-            </label>
-            <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-              Password
-              <input
-                type="password"
-                required
-                className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
-              />
-            </label>
-            <button type="submit" className="btn-pill-primary w-full">
-              Log in
-            </button>
-            <div className="flex justify-between text-xs text-slate-400">
-              <a href="#" className="hover:text-white">
-                Forgot password?
-              </a>
-              <a href="#" className="hover:text-white">
-                Need an account?
+          <div className="glass-card flex justify-center items-center p-6">
+            <div style={{float: 'left', margin: '20px'}}>
+              <a 
+                href="https://phr.charmtracker.com/login.sas?FACILITY_ID=6da761489431a9744d87b74f47ba4ed9c22a2325d65b23aa81b1d04dd4f7172a44328955ac4b2a6a" 
+                target="_blank" 
+                className="btn btn-small btn-success pull-right" 
+                style={{
+                  textDecoration: 'none',
+                  backgroundColor: '#5BB75B',
+                  background: '#62c462',
+                  backgroundImage: 'url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzYyYzQ2MiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM1MWEzNTEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+)',
+                  borderColor: 'rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)',
+                  color: '#FFFFFF',
+                  textShadow: '0 -1px 0 rgba(0, 0, 0, 0.25)',
+                  fontSize: '11px',
+                  fontFamily: "'Lucida Sans Unicode', 'Lucida Grande', sans-serif",
+                  padding: '5px 6px',
+                  borderRadius: '4px 4px 4px 4px',
+                  border: '#448944 solid 1px',
+                  cursor: 'pointer'
+                }}
+              >
+                Patient Portal
               </a>
             </div>
-          </form>
+          </div>
         </div>
       </section>
 
