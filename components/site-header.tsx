@@ -11,7 +11,7 @@ const navigation = [
   { name: 'About', href: '/about' },
   { name: 'Pricing', href: '/pricing' },
   { name: 'FAQ', href: '/faq' },
-  { name: 'Patient Portal', href: 'https://one-to-one-pediatrics.prd.opencoreemr.com/portal/' }
+  { name: 'Patient Portal', href: '/patient-portal' }
 ];
 
 export function SiteHeader() {
