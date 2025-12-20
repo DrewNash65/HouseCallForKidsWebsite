@@ -1,10 +1,9 @@
 export function HowItWorks() {
   const steps = [
     "Pre-register by filling out the form below to set up your patient portal (all children can be under one portal account), OR go directly to our Schedule page to select an available appointment time.",
-    "Portal route: You will be sent credentials to log in to your patient portal as well as a secure link to enter payment information with our partner Bluefin. (We don't collect or keep any of your financial information, ever.) Schedule route: After selecting a time, you'll receive links to register and pay your $50 deposit.",
+    "You will be sent secure links to complete registration forms, login credentials for the patient portal and a secure link to pay a $50 deposit to secure your appointment.",
     "When you would like an appointment, either log into the patient portal and select a time, or use our Schedule page directly to book available slots.",
-    "Your payment method will be charged a $50 deposit to secure the appointment time. (Your appointment is not confirmed until the deposit is paid.)",
-    "Prior to your appointment, you will be sent a secure link to connect via a HIPAA compliant Telehealth platform. You may use a phone, tablet or computer with a camera and microphone.",
+    "Just prior to your appointment time, log in to the portal and click on the telehealth icon to begin your visit.",
     "After the appointment, your card will be charged the balance due (total less deposit paid) and you will be sent a receipt to submit to your insurance company or HSA."
   ];
 
