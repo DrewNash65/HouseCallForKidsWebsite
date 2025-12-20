@@ -6,10 +6,13 @@ export default function HousecallsLWWPage() {
         <h1 className="mt-6 font-heading text-4xl text-white sm:text-5xl">
           Housecalls in Lake Wildwood
         </h1>
-        <p className="mt-6 text-lg text-slate-200">
-          Traditional in-home urgent care visits available exclusively for residents within the gates of Lake Wildwood. Services are available for both adults and children.
+        <p className="mt-6 text-lg text-slate-200 text-center">
+          Traditional in-home urgent care visits available exclusively for residents within the gates of Lake Wildwood.
         </p>
-        <p className="mt-3 text-lg text-slate-200">
+        <p className="mt-3 text-lg text-slate-200 text-center">
+          Services are available for both adults and children.
+        </p>
+        <p className="mt-3 text-lg text-slate-200 text-center">
           Experience personalized medical care in the comfort and privacy of your own home.
         </p>
       </section>
