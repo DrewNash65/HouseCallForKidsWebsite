@@ -65,11 +65,13 @@ export function InquirySection() {
         <div className="mx-auto max-w-3xl text-center">
           <span className="badge-pill">Pre-register your child</span>
           <h2 className="mt-4 font-heading text-3xl text-white sm:text-4xl">
-            Be first to know when visits open statewide.
+            Set up your family portal or schedule directly.
           </h2>
           <p className="mt-4 text-base text-slate-200">
-            We&apos;ll reach out with launch availability, gentle care tips, and early scheduling
-            options for virtual visits beginning early 2026.
+            Pre-register to set up your patient portal for each of your children (all children can be under one portal account). We&apos;ll send you launch details and gentle care tips.
+          </p>
+          <p className="mt-3 text-base text-slate-200">
+            <strong>Alternative:</strong> New and existing patients can go directly to our <a href="/schedule" className="text-brand-light hover:underline font-semibold">Schedule page</a> to select an available appointment time. After booking, you&apos;ll receive links to register for the practice and pay your $50 deposit to confirm your appointment.
           </p>
         </div>
 
