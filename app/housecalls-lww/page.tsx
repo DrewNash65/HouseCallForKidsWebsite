@@ -26,7 +26,8 @@ export default function HousecallsLWWPage() {
               <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
                 <h3 className="font-heading text-xl text-white mb-3">Diagnosis & Treatment of Illnesses</h3>
                 <ul className="text-sm text-slate-300 space-y-2">
-                  <li>• Ear infections and hearing concerns</li>
+                  <li>• Ear infections</li>
+                  <li>• Pink eye (conjunctivitis)</li>
                   <li>• Sinusitis and respiratory infections</li>
                   <li>• Pneumonia diagnosis and management</li>
                   <li>• Fever evaluation and treatment</li>

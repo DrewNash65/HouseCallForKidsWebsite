@@ -12,6 +12,7 @@ const navigation = [
   { name: 'Pricing', href: '/pricing' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Schedule', href: '/schedule' },
+  { name: 'Housecalls LWW', href: '/housecalls-lww' },
   { name: 'Patient Portal', href: '/patient-portal' }
 ];
 
