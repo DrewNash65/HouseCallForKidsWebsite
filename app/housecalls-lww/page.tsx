@@ -11,26 +11,14 @@ export default function HousecallsLWWPage() {
         </p>
         <p className="mt-3 text-lg text-slate-200 text-center">
           <span 
-            className="inline-block px-4 py-2 rounded-full border border-brand-base/30 bg-gradient-to-r from-brand-base/20 to-brand-light/20 text-white font-semibold"
+            className="inline-block px-4 py-2 rounded-full border border-brand-base/30 bg-gradient-to-r from-brand-base/20 to-brand-light/20 text-white font-semibold animate-pulse"
             style={{
-              animation: 'gentleGlow 2s ease-in-out infinite alternate',
-              boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)'
+              boxShadow: '0 0 20px rgba(59, 130, 246, 0.3), 0 0 30px rgba(34, 197, 94, 0.2)',
+              animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
             }}
           >
             Services are available for both adults and children
           </span>
-          <style jsx>{`
-            @keyframes gentleGlow {
-              0% {
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 30px rgba(34, 197, 94, 0.2);
-                transform: scale(1);
-              }
-              100% {
-                box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 0 40px rgba(34, 197, 94, 0.3);
-                transform: scale(1.02);
-              }
-            }
-          `}</style>
         </p>
         <p className="mt-3 text-lg text-slate-200 text-center">
           Experience personalized medical care in the comfort and privacy of your own home.
