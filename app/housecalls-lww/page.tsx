@@ -8,6 +8,7 @@ export default function HousecallsLWWPage() {
         </h1>
         <p className="mt-6 text-lg text-slate-200">
           Traditional in-home urgent care visits available exclusively for residents within the gates of Lake Wildwood.
+          Services are available for both adults and children.
         </p>
         <p className="mt-3 text-lg text-slate-200">
           Experience personalized medical care in the comfort and privacy of your own home.
