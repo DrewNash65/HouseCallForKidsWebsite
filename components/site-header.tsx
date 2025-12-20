@@ -47,7 +47,14 @@ export function SiteHeader() {
               href={item.href}
               className="rounded-full px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-light"
             >
-              {item.name}
+              {item.name === 'Housecalls LWW' ? (
+                <div className="text-center leading-tight">
+                  <div>Housecalls</div>
+                  <div className="text-xs">LWW</div>
+                </div>
+              ) : (
+                item.name
+              )}
             </Link>
           ))}
           <Link
@@ -86,7 +93,14 @@ export function SiteHeader() {
               onClick={() => setOpen(false)}
               className="rounded-2xl px-4 py-3 text-base font-semibold text-slate-200 transition hover:bg-white/10"
             >
-              {item.name}
+              {item.name === 'Housecalls LWW' ? (
+                <div className="text-center leading-tight">
+                  <div>Housecalls</div>
+                  <div className="text-sm">LWW</div>
+                </div>
+              ) : (
+                item.name
+              )}
             </Link>
           ))}
           <Link
