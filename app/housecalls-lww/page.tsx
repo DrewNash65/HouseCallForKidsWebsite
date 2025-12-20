@@ -7,7 +7,9 @@ export default function HousecallsLWWPage() {
           Housecalls in Lake Wildwood
         </h1>
         <p className="mt-6 text-lg text-slate-200">
-          Traditional in-home urgent care visits available exclusively for residents within the gates of Lake Wildwood. 
+          Traditional in-home urgent care visits available exclusively for residents within the gates of Lake Wildwood.
+        </p>
+        <p className="mt-3 text-lg text-slate-200">
           Experience personalized medical care in the comfort and privacy of your own home.
         </p>
       </section>
@@ -19,7 +21,7 @@ export default function HousecallsLWWPage() {
             <h2 className="mt-4 font-heading text-3xl text-white">Comprehensive in-home urgent care</h2>
             <p className="mt-4 text-base text-slate-200">
               Our housecall services bring the same quality care you expect from our virtual visits directly to your door, 
-              with the added benefit of hands-on examination and diagnostic testing when needed.
+              with the added benefit of hands-on examination, diagnostic testing, and prescriptions when needed.
             </p>
 
             <div className="mt-8 space-y-6">
