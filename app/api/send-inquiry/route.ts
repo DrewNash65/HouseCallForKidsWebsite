@@ -65,24 +65,31 @@ export async function POST(request: Request) {
     });
 
     try {
-      await sendEmail({
+      console.log('Attempting to send practice email...');
+      const practiceEmailResult = await sendEmail({
         to: ['ADHD@1to1Pediatrics.com'],
         subject: `New Patient Inquiry: ${patientName}`,
         text: practiceEmailContent,
         html: practiceEmailContent.replace(/\n/g, '<br>'),
         replyTo: email
       });
+      console.log('Practice email sent successfully:', practiceEmailResult);
 
-      await sendEmail({
+      console.log('Attempting to send confirmation email...');
+      const confirmationEmailResult = await sendEmail({
         to: [email],
         subject: 'Your Inquiry Confirmation - HouseCall for Kids',
         text: confirmationEmailContent,
         html: confirmationEmailContent.replace(/\n/g, '<br>'),
         replyTo: 'HouseCallForKids@Gmail.com'
       });
+      console.log('Confirmation email sent successfully:', confirmationEmailResult);
     } catch (emailError) {
       console.error('Email sending failed:', emailError);
-      // Continue with success response since the form was submitted
+      return corsResponse(500, {
+        error: 'Failed to send emails',
+        details: emailError instanceof Error ? emailError.message : 'Unknown email error'
+      });
     }
 
     return corsResponse(200, {
@@ -121,6 +128,8 @@ async function sendEmail({
   replyTo?: string;
 }) {
   const apiKey = process.env.RESEND_API_KEY;
+  console.log('API Key available:', !!apiKey, 'Length:', apiKey?.length);
+  
   if (!apiKey) {
     throw new Error('RESEND_API_KEY is not configured');
   }
@@ -134,6 +143,12 @@ async function sendEmail({
     replyTo
   };
 
+  console.log('Sending email to Resend API:', {
+    to,
+    subject,
+    from: emailPayload.from
+  });
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -143,12 +158,16 @@ async function sendEmail({
     body: JSON.stringify(emailPayload)
   });
 
+  console.log('Resend API response status:', response.status, response.statusText);
+
   if (!response.ok) {
     const errorText = await response.text();
+    console.error('Resend API Error Response:', errorText);
     throw new Error(`Resend API failed: ${response.status} ${response.statusText} - ${errorText}`);
   }
 
   const result = await response.json();
+  console.log('Resend API success result:', result);
   return result;
 }
 
