@@ -39,7 +39,7 @@ export function InquirySection() {
     setMessage('');
 
     try {
-      const response = await fetch('/api/submit-inquiry', {
+      const response = await fetch('/api/send-inquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...payload, submittedAt: new Date().toISOString() })

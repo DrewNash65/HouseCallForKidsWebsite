@@ -8,10 +8,7 @@ export async function OPTIONS() {
 
 export async function POST(request: Request) {
   try {
-    console.log('API route started');
-    
     const body = await request.json();
-    console.log('Request body parsed:', JSON.stringify(body, null, 2));
 
     const {
       parentName,
@@ -29,37 +26,21 @@ export async function POST(request: Request) {
       pcpFax
     } = body;
 
-    console.log('Checking required fields...');
-    console.log('Required fields check:', {
-      parentName: !!parentName,
-      phoneNumber: !!phoneNumber, 
-      email: !!email,
-      patientName: !!patientName,
-      dateOfBirth: !!dateOfBirth,
-      concerns: !!concerns
-    });
-
     if (!parentName || !phoneNumber || !email || !patientName || !dateOfBirth || !concerns) {
-      console.log('Missing required fields');
       return corsResponse(400, { error: 'Missing required fields' });
     }
 
-    console.log('Email validation...', email);
     if (!emailRegex.test(email)) {
-      console.log('Invalid email format');
       return corsResponse(400, { error: 'Invalid email format' });
     }
 
-    console.log('California resident check:', californiaResident);
     if (californiaResident !== 'yes') {
-      console.log('Not California resident');
       return corsResponse(400, {
         error:
           'At this time, we only serve patients located in California. Please check back if our service area expands.'
       });
     }
 
-    console.log('Building email content...');
     const practiceEmailContent = buildPracticeEmail({
       parentName,
       phoneNumber,
@@ -83,9 +64,7 @@ export async function POST(request: Request) {
       concerns
     });
 
-    console.log('Sending emails...');
     try {
-      console.log('Sending practice email...');
       await sendEmail({
         to: ['ADHD@1to1Pediatrics.com'],
         subject: `New Patient Inquiry: ${patientName}`,
@@ -93,9 +72,7 @@ export async function POST(request: Request) {
         html: practiceEmailContent.replace(/\n/g, '<br>'),
         replyTo: email
       });
-      console.log('Practice email sent successfully');
 
-      console.log('Sending confirmation email...');
       await sendEmail({
         to: [email],
         subject: 'Your Inquiry Confirmation - HouseCall for Kids',
@@ -103,14 +80,11 @@ export async function POST(request: Request) {
         html: confirmationEmailContent.replace(/\n/g, '<br>'),
         replyTo: 'HouseCallForKids@Gmail.com'
       });
-      console.log('Confirmation email sent successfully');
     } catch (emailError) {
       console.error('Email sending failed:', emailError);
-      // Still return success since the inquiry was received
-      // The email failure shouldn't block the user experience
+      // Continue with success response since the form was submitted
     }
 
-    console.log('API route completed successfully');
     return corsResponse(200, {
       success: true,
       message: 'Inquiry submitted successfully',
@@ -118,7 +92,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Inquiry submission error:', error);
-    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
     return corsResponse(500, {
       error: 'Failed to submit inquiry. Please try again or contact us directly.',
       details: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined
@@ -161,12 +134,6 @@ async function sendEmail({
     replyTo
   };
 
-  console.log('Sending email with payload:', {
-    ...emailPayload,
-    html: html.substring(0, 100) + '...',
-    text: text.substring(0, 100) + '...'
-  });
-
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -178,39 +145,30 @@ async function sendEmail({
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error('Resend API Error:', {
-      status: response.status,
-      statusText: response.statusText,
-      body: errorText
-    });
     throw new Error(`Resend API failed: ${response.status} ${response.statusText} - ${errorText}`);
   }
 
   const result = await response.json();
-  console.log('Email sent successfully:', result);
   return result;
 }
 
 function buildPracticeEmail(fields: Record<string, string | undefined>) {
-  try {
-    const {
-      parentName,
-      phoneNumber,
-      email,
-      patientName,
-      dateOfBirth,
-      californiaResident,
-      concerns,
-      afterHours,
-      questions,
-      pcpName,
-      pcpPhone,
-      pcpFax
-    } = fields;
+  const {
+    parentName,
+    phoneNumber,
+    email,
+    patientName,
+    dateOfBirth,
+    californiaResident,
+    concerns,
+    afterHours,
+    questions,
+    pcpName,
+    pcpPhone,
+    pcpFax
+  } = fields;
 
-    console.log('Building practice email with fields:', fields);
-
-    const emailContent = `
+  return `
 NEW PATIENT INQUIRY - HouseCall for Kids Virtual Pediatric Urgent Care
 
 PARENT/GUARDIAN INFORMATION:
@@ -241,14 +199,7 @@ SUBMISSION DETAILS:
 ---
 This is an automated message from your HouseCall for Kids website inquiry form.
 Patient is reserving a spot for the Early January 2026 launch.
-    `.trim();
-
-    console.log('Practice email content built successfully');
-    return emailContent;
-  } catch (error) {
-    console.error('Error building practice email:', error);
-    throw new Error(`Failed to build practice email: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  }
+  `.trim();
 }
 
 function buildConfirmationEmail({
@@ -262,10 +213,7 @@ function buildConfirmationEmail({
   dateOfBirth: string;
   concerns: string;
 }) {
-  try {
-    console.log('Building confirmation email for:', { parentName, patientName });
-    
-    const emailContent = `
+  return `
 Thank you for your inquiry - HouseCall for Kids
 
 Dear ${parentName || 'Parent/Guardian'},
@@ -304,12 +252,5 @@ A division of 1-to-1 Pediatrics
 ---
 This is an automated confirmation. Please do not reply to this email.
 For questions, we'll contact you directly soon.
-    `.trim();
-
-    console.log('Confirmation email content built successfully');
-    return emailContent;
-  } catch (error) {
-    console.error('Error building confirmation email:', error);
-    throw new Error(`Failed to build confirmation email: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  }
+  `.trim();
 }
