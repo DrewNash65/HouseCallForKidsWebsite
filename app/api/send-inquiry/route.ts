@@ -169,7 +169,7 @@ async function sendEmail({
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      from: 'noreply@1to1pediatrics.com',
+      from: 'onboarding@resend.dev',
       to,
       subject,
       html,
