@@ -2,13 +2,6 @@ import { NextResponse } from 'next/server';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function maskEmail(email?: string) {
-  if (!email) return undefined;
-  const parts = email.split('@');
-  if (parts.length !== 2) return '[redacted]';
-  return `${parts[0].slice(0, 1)}***@${parts[1]}`;
-}
-
 export async function OPTIONS() {
   return corsResponse(200, {});
 }
@@ -41,19 +34,6 @@ export async function POST(request: Request) {
       return corsResponse(400, { error: 'Invalid email format' });
     }
 
-    // Log useful, non-sensitive debug info to help track down 500s in production
-    try {
-      console.info('send-inquiry request', {
-        parentName: parentName || undefined,
-        patientName: patientName || undefined,
-        email: maskEmail(email),
-        californiaResident,
-        hasResendKey: !!process.env.RESEND_API_KEY
-      });
-    } catch (logErr) {
-      console.warn('Failed to log request debug info', logErr);
-    }
-
     if (californiaResident !== 'yes') {
       return corsResponse(400, {
         error:
@@ -84,18 +64,13 @@ export async function POST(request: Request) {
       concerns
     });
 
-    try {
-      await sendEmail({
-        to: ['ADHD@1to1Pediatrics.com'],
-        subject: `New Patient Inquiry: ${patientName}`,
-        text: practiceEmailContent,
-        html: practiceEmailContent.replace(/\n/g, '<br>'),
-        replyTo: email
-      });
-    } catch (err) {
-      console.error('Failed to send practice email', err instanceof Error ? err.stack || err.message : err);
-      throw err;
-    }
+    await sendEmail({
+      to: ['ADHD@1to1Pediatrics.com'],
+      subject: `New Patient Inquiry: ${patientName}`,
+      text: practiceEmailContent,
+      html: practiceEmailContent.replace(/\n/g, '<br>'),
+      replyTo: email
+    });
 
     await sendEmail({
       to: [email],
@@ -113,16 +88,10 @@ export async function POST(request: Request) {
       id: Date.now().toString()
     });
   } catch (error) {
-    console.error('Inquiry submission error:', error instanceof Error ? error.stack || error.message : error);
-    // In non-production environments include detailed debug info to aid troubleshooting.
-    const debugInfo =
-      process.env.NODE_ENV !== 'production' && error instanceof Error
-        ? { message: error.message, stack: error.stack }
-        : undefined;
-
+    console.error('Inquiry submission error:', error);
     return corsResponse(500, {
       error: 'Failed to submit inquiry. Please try again or contact us directly.',
-      debug: debugInfo
+      details: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined
     });
   }
 }
