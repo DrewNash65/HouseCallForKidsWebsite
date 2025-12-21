@@ -129,6 +129,7 @@ async function sendEmail({
 }) {
   const apiKey = process.env.RESEND_API_KEY;
   console.log('API Key available:', !!apiKey, 'Length:', apiKey?.length);
+  console.log('API Key first 10 chars:', apiKey?.substring(0, 10));
   
   if (!apiKey) {
     throw new Error('RESEND_API_KEY is not configured');
