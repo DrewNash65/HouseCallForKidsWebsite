@@ -84,8 +84,7 @@ export async function POST(request: Request) {
         patientName,
         email,
         phoneNumber,
-        reasonForVisit,
-        submittedAt
+        reasonForVisit
       });
       confirmationEmailContent = buildLakeWildwoodConfirmation({
         patientName,
@@ -278,7 +277,6 @@ function buildLakeWildwoodEmail(fields: {
   email: string;
   phoneNumber: string;
   reasonForVisit: string;
-  submittedAt: string;
 }) {
   const { patientName, email, phoneNumber, reasonForVisit } = fields;
 
