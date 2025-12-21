@@ -149,7 +149,16 @@ async function sendEmail({
   replyTo?: string;
 }) {
   const apiKey = process.env.RESEND_API_KEY;
+  
+  console.log('Sending email with:', {
+    to: to.length,
+    subject: subject.substring(0, 50),
+    hasApiKey: !!apiKey,
+    apiKeyLength: apiKey?.length || 0
+  });
+  
   if (!apiKey) {
+    console.error('RESEND_API_KEY is missing from environment');
     throw new Error('RESEND_API_KEY missing');
   }
 
@@ -169,6 +178,12 @@ async function sendEmail({
     })
   });
 
+  console.log('Resend API Response:', {
+    status: response.status,
+    statusText: response.statusText,
+    ok: response.ok
+  });
+
   if (!response.ok) {
     const errorText = await response.text();
     console.error('Resend API Error:', {
@@ -184,6 +199,10 @@ async function sendEmail({
     }
     throw new Error(`Failed to send email: ${errorData.message || response.statusText}`);
   }
+  
+  const responseData = await response.json();
+  console.log('Email sent successfully:', { id: responseData.id });
+  return responseData;
 }
 
 function buildPracticeEmail(fields: Record<string, string>) {
