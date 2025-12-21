@@ -280,7 +280,7 @@ function buildLakeWildwoodEmail(fields: {
   reasonForVisit: string;
   submittedAt: string;
 }) {
-  const { patientName, email, phoneNumber, reasonForVisit, submittedAt } = fields;
+  const { patientName, email, phoneNumber, reasonForVisit } = fields;
 
   return `
 LAKE WILDWOOD HOUSECALL REQUEST

@@ -153,7 +153,7 @@ export default function HousecallsLWWPage() {
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
               <h3 className="font-heading text-xl text-white mb-3">Request Form</h3>
               <p className="text-sm text-slate-300 mb-4">
-                Fill out the form below and we'll contact you to schedule your in-home visit.
+                Fill out the form below and we&apos;ll contact you to schedule your in-home visit.
               </p>
             </div>
 
