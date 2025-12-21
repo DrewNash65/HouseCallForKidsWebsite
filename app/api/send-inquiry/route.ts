@@ -8,7 +8,10 @@ export async function OPTIONS() {
 
 export async function POST(request: Request) {
   try {
+    console.log('API route started');
+    
     const body = await request.json();
+    console.log('Request body parsed:', JSON.stringify(body, null, 2));
 
     const {
       parentName,
@@ -26,21 +29,37 @@ export async function POST(request: Request) {
       pcpFax
     } = body;
 
+    console.log('Checking required fields...');
+    console.log('Required fields check:', {
+      parentName: !!parentName,
+      phoneNumber: !!phoneNumber, 
+      email: !!email,
+      patientName: !!patientName,
+      dateOfBirth: !!dateOfBirth,
+      concerns: !!concerns
+    });
+
     if (!parentName || !phoneNumber || !email || !patientName || !dateOfBirth || !concerns) {
+      console.log('Missing required fields');
       return corsResponse(400, { error: 'Missing required fields' });
     }
 
+    console.log('Email validation...', email);
     if (!emailRegex.test(email)) {
+      console.log('Invalid email format');
       return corsResponse(400, { error: 'Invalid email format' });
     }
 
+    console.log('California resident check:', californiaResident);
     if (californiaResident !== 'yes') {
+      console.log('Not California resident');
       return corsResponse(400, {
         error:
           'At this time, we only serve patients located in California. Please check back if our service area expands.'
       });
     }
 
+    console.log('Building email content...');
     const practiceEmailContent = buildPracticeEmail({
       parentName,
       phoneNumber,
@@ -64,7 +83,9 @@ export async function POST(request: Request) {
       concerns
     });
 
+    console.log('Sending emails...');
     try {
+      console.log('Sending practice email...');
       await sendEmail({
         to: ['ADHD@1to1Pediatrics.com'],
         subject: `New Patient Inquiry: ${patientName}`,
@@ -72,7 +93,9 @@ export async function POST(request: Request) {
         html: practiceEmailContent.replace(/\n/g, '<br>'),
         replyTo: email
       });
+      console.log('Practice email sent successfully');
 
+      console.log('Sending confirmation email...');
       await sendEmail({
         to: [email],
         subject: 'Your Inquiry Confirmation - HouseCall for Kids',
@@ -80,12 +103,14 @@ export async function POST(request: Request) {
         html: confirmationEmailContent.replace(/\n/g, '<br>'),
         replyTo: 'HouseCallForKids@Gmail.com'
       });
+      console.log('Confirmation email sent successfully');
     } catch (emailError) {
       console.error('Email sending failed:', emailError);
       // Still return success since the inquiry was received
       // The email failure shouldn't block the user experience
     }
 
+    console.log('API route completed successfully');
     return corsResponse(200, {
       success: true,
       message: 'Inquiry submitted successfully',
@@ -93,6 +118,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Inquiry submission error:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
     return corsResponse(500, {
       error: 'Failed to submit inquiry. Please try again or contact us directly.',
       details: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined
