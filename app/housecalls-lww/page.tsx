@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { LoadingSpinner } from '../../components/loading-spinner';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -175,64 +176,24 @@ export default function HousecallsLWWPage() {
           <div className="rounded-3xl border border-brand-base/30 bg-brand-base/10 p-6">
             <h3 className="font-heading text-2xl text-white text-center mb-6">Lake Wildwood Housecall Request</h3>
             
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid gap-6 md:grid-cols-2">
-                <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-                  Patient Name
-                  <input
-                    required
-                    name="patientName"
-                    type="text"
-                    placeholder="Patient's full name"
-                    className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
-                  />
-                </label>
+            <form className="grid gap-6 md:grid-cols-2" onSubmit={handleSubmit}>
+              <Field label="Patient Name" name="patientName" placeholder="Patient's full name" />
+              <Field label="Email Address" name="email" type="email" placeholder="your.email@example.com" autoComplete="email" />
+              <Field label="Phone Number" name="phoneNumber" type="tel" placeholder="(530) 123-4567" autoComplete="tel" />
+              
+              <TextareaField
+                label="Reason for Visit Request"
+                name="reasonForVisit"
+                placeholder="Briefly describe the reason for the housecall request..."
+                className="md:col-span-2"
+              />
 
-                <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-                  Email Address
-                  <input
-                    required
-                    name="email"
-                    type="email"
-                    placeholder="your.email@example.com"
-                    className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
-                  />
-                </label>
-
-                <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-                  Phone Number
-                  <input
-                    required
-                    name="phoneNumber"
-                    type="tel"
-                    placeholder="(530) 123-4567"
-                    className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
-                  />
-                </label>
-
-                <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-                  Reason for Visit Request
-                  <textarea
-                    required
-                    name="reasonForVisit"
-                    rows={4}
-                    placeholder="Briefly describe the reason for the housecall request..."
-                    className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
-                  />
-                </label>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="md:col-span-2 flex flex-wrap items-center gap-4">
                 <button type="submit" className="btn-pill-primary flex items-center gap-2">
-                  {status === 'loading' && (
-                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                  )}
+                  {status === 'loading' ? <LoadingSpinner /> : null}
                   <span>{status === 'loading' ? 'Sending Request...' : 'Request Housecall'}</span>
                 </button>
-                {status !== 'idle' && message && (
+                {status !== 'idle' && message ? (
                   <p
                     role="status"
                     className={
@@ -243,7 +204,7 @@ export default function HousecallsLWWPage() {
                   >
                     {message}
                   </p>
-                )}
+                ) : null}
               </div>
             </form>
           </div>
@@ -284,5 +245,60 @@ export default function HousecallsLWWPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+function Field({
+  label,
+  name,
+  type = 'text',
+  autoComplete,
+  placeholder,
+  required = true
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  autoComplete?: string;
+  placeholder?: string;
+  required?: boolean;
+}) {
+  return (
+    <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
+      {label}
+      <input
+        required={required}
+        name={name}
+        type={type}
+        autoComplete={autoComplete}
+        placeholder={placeholder}
+        className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
+      />
+    </label>
+  );
+}
+
+function TextareaField({
+  label,
+  name,
+  placeholder,
+  className
+}: {
+  label: string;
+  name: string;
+  placeholder?: string;
+  className?: string;
+}) {
+  return (
+    <label className={`flex flex-col gap-2 text-sm font-medium text-slate-200 ${className ?? ''}`}>
+      {label}
+      <textarea
+        required
+        name={name}
+        rows={5}
+        placeholder={placeholder}
+        className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
+      />
+    </label>
   );
 }
