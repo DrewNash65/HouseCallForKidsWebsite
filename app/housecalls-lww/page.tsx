@@ -1,51 +1,4 @@
-"use client";
-
-import { useState } from 'react';
-import { LoadingSpinner } from '../../components/loading-spinner';
-
-type Status = 'idle' | 'loading' | 'success' | 'error';
-
 export default function HousecallsLWWPage() {
-  const [status, setStatus] = useState<Status>('idle');
-  const [message, setMessage] = useState<string>('');
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-
-    const payload = {
-      patientName: formData.get('patientName')?.toString().trim() ?? '',
-      email: formData.get('email')?.toString().trim() ?? '',
-      phoneNumber: formData.get('phoneNumber')?.toString().trim() ?? '',
-      reasonForVisit: formData.get('reasonForVisit')?.toString().trim() ?? '',
-      formType: 'Lake Wildwood Housecall Request'
-    };
-
-    setStatus('loading');
-    setMessage('');
-
-    try {
-      const response = await fetch('/api/send-inquiry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...payload, submittedAt: new Date().toISOString() })
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || 'Something went wrong. Please try again.');
-      }
-
-      setStatus('success');
-      setMessage("Thank you! We'll contact you soon to schedule your Lake Wildwood housecall.");
-      form.reset();
-    } catch (error) {
-      setStatus('error');
-      setMessage(error instanceof Error ? error.message : 'Something went wrong.');
-    }
-  }
-
   return (
     <div className="px-6 pb-24 pt-16 lg:px-10">
       <section className="mx-auto max-w-5xl text-center">
@@ -152,10 +105,16 @@ export default function HousecallsLWWPage() {
           
           <div className="grid gap-6 md:grid-cols-2 mb-8">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
-              <h3 className="font-heading text-xl text-white mb-3">Request Form</h3>
+              <h3 className="font-heading text-xl text-white mb-3">Call or Text</h3>
               <p className="text-sm text-slate-300 mb-4">
-                Fill out the form below and we&apos;ll contact you to schedule your in-home visit.
+                Contact us directly to schedule your in-home visit in Lake Wildwood.
               </p>
+              <a 
+                href="tel:530-799-0746"
+                className="btn-pill-primary inline-flex items-center gap-2"
+              >
+                📞 (530) 799-0746
+              </a>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
@@ -170,43 +129,6 @@ export default function HousecallsLWWPage() {
                 Access Portal
               </a>
             </div>
-          </div>
-
-          {/* Lake Wildwood Housecall Request Form */}
-          <div className="rounded-3xl border border-brand-base/30 bg-brand-base/10 p-6">
-            <h3 className="font-heading text-2xl text-white text-center mb-6">Lake Wildwood Housecall Request</h3>
-            
-            <form className="grid gap-6 md:grid-cols-2" onSubmit={handleSubmit}>
-              <Field label="Patient Name" name="patientName" placeholder="Patient's full name" />
-              <Field label="Email Address" name="email" type="email" placeholder="your.email@example.com" autoComplete="email" />
-              <Field label="Phone Number" name="phoneNumber" type="tel" placeholder="(530) 123-4567" autoComplete="tel" />
-              
-              <TextareaField
-                label="Reason for Visit Request"
-                name="reasonForVisit"
-                placeholder="Briefly describe the reason for the housecall request..."
-                className="md:col-span-2"
-              />
-
-              <div className="md:col-span-2 flex flex-wrap items-center gap-4">
-                <button type="submit" className="btn-pill-primary flex items-center gap-2">
-                  {status === 'loading' ? <LoadingSpinner /> : null}
-                  <span>{status === 'loading' ? 'Sending Request...' : 'Request Housecall'}</span>
-                </button>
-                {status !== 'idle' && message ? (
-                  <p
-                    role="status"
-                    className={
-                      status === 'success'
-                        ? 'text-sm font-semibold text-brand-light'
-                        : 'text-sm font-medium text-rose-200'
-                    }
-                  >
-                    {message}
-                  </p>
-                ) : null}
-              </div>
-            </form>
           </div>
 
           <div className="mt-8 rounded-2xl border border-brand-base/30 bg-brand-base/10 p-6 text-sm text-slate-200">
@@ -245,60 +167,5 @@ export default function HousecallsLWWPage() {
         </div>
       </section>
     </div>
-  );
-}
-
-function Field({
-  label,
-  name,
-  type = 'text',
-  autoComplete,
-  placeholder,
-  required = true
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  autoComplete?: string;
-  placeholder?: string;
-  required?: boolean;
-}) {
-  return (
-    <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
-      {label}
-      <input
-        required={required}
-        name={name}
-        type={type}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
-      />
-    </label>
-  );
-}
-
-function TextareaField({
-  label,
-  name,
-  placeholder,
-  className
-}: {
-  label: string;
-  name: string;
-  placeholder?: string;
-  className?: string;
-}) {
-  return (
-    <label className={`flex flex-col gap-2 text-sm font-medium text-slate-200 ${className ?? ''}`}>
-      {label}
-      <textarea
-        required
-        name={name}
-        rows={5}
-        placeholder={placeholder}
-        className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
-      />
-    </label>
   );
 }

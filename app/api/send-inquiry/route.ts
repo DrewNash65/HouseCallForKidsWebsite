@@ -2,13 +2,6 @@ import { NextResponse } from 'next/server';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function maskEmail(email?: string) {
-  if (!email) return undefined;
-  const parts = email.split('@');
-  if (parts.length !== 2) return '[redacted]';
-  return `${parts[0].slice(0, 1)}***@${parts[1]}`;
-}
-
 export async function OPTIONS() {
   return corsResponse(200, {});
 }
@@ -30,112 +23,58 @@ export async function POST(request: Request) {
       submittedAt,
       pcpName,
       pcpPhone,
-      pcpFax,
-      formType,
-      reasonForVisit
+      pcpFax
     } = body;
 
-    // Check if this is a Lake Wildwood housecall request
-    const isLakeWildwoodRequest = formType === 'Lake Wildwood Housecall Request';
-
-    // Validate required fields based on form type
-    if (isLakeWildwoodRequest) {
-      if (!patientName || !email || !phoneNumber || !reasonForVisit) {
-        return corsResponse(400, { error: 'Missing required fields' });
-      }
-    } else {
-      if (!parentName || !phoneNumber || !email || !patientName || !dateOfBirth || !concerns) {
-        return corsResponse(400, { error: 'Missing required fields' });
-      }
+    if (!parentName || !phoneNumber || !email || !patientName || !dateOfBirth || !concerns) {
+      return corsResponse(400, { error: 'Missing required fields' });
     }
 
     if (!emailRegex.test(email)) {
       return corsResponse(400, { error: 'Invalid email format' });
     }
 
-    // Log useful, non-sensitive debug info to help track down 500s in production
-    try {
-      console.info('send-inquiry request', {
-        formType: formType || 'Standard Inquiry',
-        parentName: parentName || undefined,
-        patientName: patientName || undefined,
-        email: maskEmail(email),
-        californiaResident,
-        hasResendKey: !!process.env.RESEND_API_KEY
-      });
-    } catch (logErr) {
-      console.warn('Failed to log request debug info', logErr);
-    }
-
-    // Only check California residency for standard inquiries
-    if (!isLakeWildwoodRequest && californiaResident !== 'yes') {
+    if (californiaResident !== 'yes') {
       return corsResponse(400, {
         error:
           'At this time, we only serve patients located in California. Please check back if our service area expands.'
       });
     }
 
-    let practiceEmailContent: string;
-    let confirmationEmailContent: string;
-    let emailSubject: string;
+    const practiceEmailContent = buildPracticeEmail({
+      parentName,
+      phoneNumber,
+      email,
+      patientName,
+      dateOfBirth,
+      californiaResident,
+      concerns,
+      afterHours,
+      questions,
+      submittedAt,
+      pcpName,
+      pcpPhone,
+      pcpFax
+    });
 
-    if (isLakeWildwoodRequest) {
-      practiceEmailContent = buildLakeWildwoodEmail({
-        patientName,
-        email,
-        phoneNumber,
-        reasonForVisit
-      });
-      confirmationEmailContent = buildLakeWildwoodConfirmation({
-        patientName,
-        reasonForVisit
-      });
-      emailSubject = `Lake Wildwood Housecall Request: ${patientName}`;
-    } else {
-      practiceEmailContent = buildPracticeEmail({
-        parentName,
-        phoneNumber,
-        email,
-        patientName,
-        dateOfBirth,
-        californiaResident,
-        concerns,
-        afterHours,
-        questions,
-        submittedAt,
-        pcpName,
-        pcpPhone,
-        pcpFax
-      });
-      confirmationEmailContent = buildConfirmationEmail({
-        parentName,
-        patientName,
-        dateOfBirth,
-        concerns
-      });
-      emailSubject = `New Patient Inquiry: ${patientName}`;
-    }
+    const confirmationEmailContent = buildConfirmationEmail({
+      parentName,
+      patientName,
+      dateOfBirth,
+      concerns
+    });
 
-    try {
-      await sendEmail({
-        to: ['ADHD@1to1Pediatrics.com'],
-        subject: emailSubject,
-        text: practiceEmailContent,
-        html: practiceEmailContent.replace(/\n/g, '<br>'),
-        replyTo: email
-      });
-    } catch (err) {
-      console.error('Failed to send practice email', err instanceof Error ? err.stack || err.message : err);
-      throw err;
-    }
-
-    const confirmationSubject = isLakeWildwoodRequest 
-      ? 'Lake Wildwood Housecall Request Received'
-      : 'Your Inquiry Confirmation - HouseCall for Kids';
+    await sendEmail({
+      to: ['ADHD@1to1Pediatrics.com'],
+      subject: `New Patient Inquiry: ${patientName}`,
+      text: practiceEmailContent,
+      html: practiceEmailContent.replace(/\n/g, '<br>'),
+      replyTo: email
+    });
 
     await sendEmail({
       to: [email],
-      subject: confirmationSubject,
+      subject: 'Your Inquiry Confirmation - HouseCall for Kids',
       text: confirmationEmailContent,
       html: confirmationEmailContent.replace(/\n/g, '<br>'),
       replyTo: 'HouseCallForKids@Gmail.com'
@@ -149,16 +88,10 @@ export async function POST(request: Request) {
       id: Date.now().toString()
     });
   } catch (error) {
-    console.error('Inquiry submission error:', error instanceof Error ? error.stack || error.message : error);
-    // In non-production environments include detailed debug info to aid troubleshooting.
-    const debugInfo =
-      process.env.NODE_ENV !== 'production' && error instanceof Error
-        ? { message: error.message, stack: error.stack }
-        : undefined;
-
+    console.error('Inquiry submission error:', error);
     return corsResponse(500, {
       error: 'Failed to submit inquiry. Please try again or contact us directly.',
-      debug: debugInfo
+      details: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined
     });
   }
 }
@@ -272,36 +205,6 @@ Patient is reserving a spot for the Early January 2026 launch.
   `.trim();
 }
 
-function buildLakeWildwoodEmail(fields: {
-  patientName: string;
-  email: string;
-  phoneNumber: string;
-  reasonForVisit: string;
-}) {
-  const { patientName, email, phoneNumber, reasonForVisit } = fields;
-
-  return `
-LAKE WILDWOOD HOUSECALL REQUEST
-
-CONTACT INFORMATION:
-• Patient Name: ${patientName}
-• Email: ${email}
-• Phone: ${phoneNumber}
-
-REQUEST DETAILS:
-• Reason for Visit: ${reasonForVisit}
-
-SUBMISSION DETAILS:
-• Submitted: ${new Date().toLocaleString()}
-• Service Type: Lake Wildwood In-Home Housecall
-• Location: Lake Wildwood (within gates only)
-
----
-This is an automated message from the Lake Wildwood housecall request form.
-Please contact the patient to schedule the in-home visit.
-  `.trim();
-}
-
 function buildConfirmationEmail({
   parentName,
   patientName,
@@ -352,50 +255,5 @@ A division of 1-to-1 Pediatrics
 ---
 This is an automated confirmation. Please do not reply to this email.
 For questions, we'll contact you directly soon.
-  `.trim();
-}
-
-function buildLakeWildwoodConfirmation({
-  patientName,
-  reasonForVisit
-}: {
-  patientName: string;
-  reasonForVisit: string;
-}) {
-  return `
-Lake Wildwood Housecall Request Received
-
-Thank you for your housecall request! We've received your request for ${patientName} and will contact you soon to schedule your in-home visit.
-
-YOUR REQUEST DETAILS:
-• Patient: ${patientName}
-• Reason for Visit: ${reasonForVisit}
-• Service Area: Lake Wildwood (within gates)
-
-WHAT HAPPENS NEXT:
-• We'll contact you within 24-48 hours to schedule your visit
-• We'll confirm your Lake Wildwood address and provide an estimated arrival time
-• Payment (starting at $250) will be due at the time of service
-
-IMPORTANT REMINDERS:
-• This service is exclusively for Lake Wildwood residents within the gates
-• Available during select days and times
-• For medical emergencies, call 911
-• Additional testing and procedures may incur extra charges
-
-WHAT TO EXPECT:
-• Comprehensive in-home urgent care evaluation
-• Diagnostic testing when appropriate (strep, flu, COVID, RSV)
-• Treatment and prescriptions as needed
-• Professional medical care in the comfort of your home
-
-We look forward to providing personalized medical care for your family!
-
-Best regards,
-Dr. Nash & The HouseCall for Kids Team
-
----
-This is an automated confirmation. We will contact you directly to schedule your appointment.
-For urgent concerns, please call (530) 799-0746 or email HouseCallForKids@gmail.com.
   `.trim();
 }
