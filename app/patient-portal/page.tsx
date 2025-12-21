@@ -41,12 +41,12 @@ export default function PatientPortalPage() {
             </div>
           </div>
 
-          <div className="glass-card flex justify-center items-center p-6">
-            <div style={{float: 'left', margin: '20px'}}>
+          <div className="glass-card flex justify-center items-center p-8">
+            <div className="w-full flex justify-center">
               <a 
                 href="https://phr.charmtracker.com/login.sas?FACILITY_ID=6da761489431a9744d87b74f47ba4ed9c22a2325d65b23aa81b1d04dd4f7172a44328955ac4b2a6a" 
                 target="_blank" 
-                className="btn btn-small btn-success pull-right" 
+                className="btn btn-large btn-success" 
                 style={{
                   textDecoration: 'none',
                   backgroundColor: '#5BB75B',
@@ -55,15 +55,21 @@ export default function PatientPortalPage() {
                   borderColor: 'rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)',
                   color: '#FFFFFF',
                   textShadow: '0 -1px 0 rgba(0, 0, 0, 0.25)',
-                  fontSize: '11px',
+                  fontSize: '24px',
+                  fontWeight: 'bold',
                   fontFamily: "'Lucida Sans Unicode', 'Lucida Grande', sans-serif",
-                  padding: '5px 6px',
-                  borderRadius: '4px 4px 4px 4px',
-                  border: '#448944 solid 1px',
-                  cursor: 'pointer'
+                  padding: '20px 40px',
+                  borderRadius: '12px',
+                  border: '#448944 solid 2px',
+                  cursor: 'pointer',
+                  minWidth: '300px',
+                  textAlign: 'center',
+                  display: 'block',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+                  transition: 'all 0.3s ease'
                 }}
               >
-                Patient Portal
+                🏥 Access Patient Portal
               </a>
             </div>
           </div>
