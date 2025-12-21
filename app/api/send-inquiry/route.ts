@@ -94,7 +94,7 @@ export async function POST(request: Request) {
     console.error('Inquiry submission error:', error);
     return corsResponse(500, {
       error: 'Failed to submit inquiry. Please try again or contact us directly.',
-      details: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined
+      details: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }
