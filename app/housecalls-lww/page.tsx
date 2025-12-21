@@ -1,4 +1,50 @@
+"use client";
+
+import { useState } from 'react';
+
+type Status = 'idle' | 'loading' | 'success' | 'error';
+
 export default function HousecallsLWWPage() {
+  const [status, setStatus] = useState<Status>('idle');
+  const [message, setMessage] = useState<string>('');
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const payload = {
+      patientName: formData.get('patientName')?.toString().trim() ?? '',
+      email: formData.get('email')?.toString().trim() ?? '',
+      phoneNumber: formData.get('phoneNumber')?.toString().trim() ?? '',
+      reasonForVisit: formData.get('reasonForVisit')?.toString().trim() ?? '',
+      formType: 'Lake Wildwood Housecall Request'
+    };
+
+    setStatus('loading');
+    setMessage('');
+
+    try {
+      const response = await fetch('/api/send-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, submittedAt: new Date().toISOString() })
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
+      setStatus('success');
+      setMessage("Thank you! We'll contact you soon to schedule your Lake Wildwood housecall.");
+      form.reset();
+    } catch (error) {
+      setStatus('error');
+      setMessage(error instanceof Error ? error.message : 'Something went wrong.');
+    }
+  }
+
   return (
     <div className="px-6 pb-24 pt-16 lg:px-10">
       <section className="mx-auto max-w-5xl text-center">
@@ -103,18 +149,12 @@ export default function HousecallsLWWPage() {
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-gentle backdrop-blur-xl">
           <h2 className="font-heading text-3xl text-white text-center mb-6">Schedule Your Housecall</h2>
           
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 mb-8">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
-              <h3 className="font-heading text-xl text-white mb-3">Email Request</h3>
+              <h3 className="font-heading text-xl text-white mb-3">Request Form</h3>
               <p className="text-sm text-slate-300 mb-4">
-                Send us a message with your preferred appointment time and brief description of your needs.
+                Fill out the form below and we'll contact you to schedule your in-home visit.
               </p>
-              <a 
-                href="mailto:HouseCallForKids@gmail.com?subject=Lake Wildwood Housecall Request"
-                className="btn-pill-primary inline-flex"
-              >
-                Email Us
-              </a>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
@@ -129,6 +169,83 @@ export default function HousecallsLWWPage() {
                 Access Portal
               </a>
             </div>
+          </div>
+
+          {/* Lake Wildwood Housecall Request Form */}
+          <div className="rounded-3xl border border-brand-base/30 bg-brand-base/10 p-6">
+            <h3 className="font-heading text-2xl text-white text-center mb-6">Lake Wildwood Housecall Request</h3>
+            
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="grid gap-6 md:grid-cols-2">
+                <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
+                  Patient Name
+                  <input
+                    required
+                    name="patientName"
+                    type="text"
+                    placeholder="Patient's full name"
+                    className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
+                  />
+                </label>
+
+                <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
+                  Email Address
+                  <input
+                    required
+                    name="email"
+                    type="email"
+                    placeholder="your.email@example.com"
+                    className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
+                  />
+                </label>
+
+                <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
+                  Phone Number
+                  <input
+                    required
+                    name="phoneNumber"
+                    type="tel"
+                    placeholder="(530) 123-4567"
+                    className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
+                  />
+                </label>
+
+                <label className="flex flex-col gap-2 text-sm font-medium text-slate-200">
+                  Reason for Visit Request
+                  <textarea
+                    required
+                    name="reasonForVisit"
+                    rows={4}
+                    placeholder="Briefly describe the reason for the housecall request..."
+                    className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-base focus:outline-none focus:ring-2 focus:ring-brand-base/40"
+                  />
+                </label>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <button type="submit" className="btn-pill-primary flex items-center gap-2">
+                  {status === 'loading' && (
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  )}
+                  <span>{status === 'loading' ? 'Sending Request...' : 'Request Housecall'}</span>
+                </button>
+                {status !== 'idle' && message && (
+                  <p
+                    role="status"
+                    className={
+                      status === 'success'
+                        ? 'text-sm font-semibold text-brand-light'
+                        : 'text-sm font-medium text-rose-200'
+                    }
+                  >
+                    {message}
+                  </p>
+                )}
+              </div>
+            </form>
           </div>
 
           <div className="mt-8 rounded-2xl border border-brand-base/30 bg-brand-base/10 p-6 text-sm text-slate-200">
