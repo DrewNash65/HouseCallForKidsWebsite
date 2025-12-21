@@ -64,23 +64,27 @@ export async function POST(request: Request) {
       concerns
     });
 
-    await sendEmail({
-      to: ['ADHD@1to1Pediatrics.com'],
-      subject: `New Patient Inquiry: ${patientName}`,
-      text: practiceEmailContent,
-      html: practiceEmailContent.replace(/\n/g, '<br>'),
-      replyTo: email
-    });
+    try {
+      await sendEmail({
+        to: ['ADHD@1to1Pediatrics.com'],
+        subject: `New Patient Inquiry: ${patientName}`,
+        text: practiceEmailContent,
+        html: practiceEmailContent.replace(/\n/g, '<br>'),
+        replyTo: email
+      });
 
-    await sendEmail({
-      to: [email],
-      subject: 'Your Inquiry Confirmation - HouseCall for Kids',
-      text: confirmationEmailContent,
-      html: confirmationEmailContent.replace(/\n/g, '<br>'),
-      replyTo: 'HouseCallForKids@Gmail.com'
-    }).catch(error => {
-      console.error('Failed to send confirmation email', error);
-    });
+      await sendEmail({
+        to: [email],
+        subject: 'Your Inquiry Confirmation - HouseCall for Kids',
+        text: confirmationEmailContent,
+        html: confirmationEmailContent.replace(/\n/g, '<br>'),
+        replyTo: 'HouseCallForKids@Gmail.com'
+      });
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError);
+      // Still return success since the inquiry was received
+      // The email failure shouldn't block the user experience
+    }
 
     return corsResponse(200, {
       success: true,
@@ -119,8 +123,23 @@ async function sendEmail({
 }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    throw new Error('RESEND_API_KEY missing');
+    throw new Error('RESEND_API_KEY is not configured');
   }
+
+  const emailPayload = {
+    from: 'noreply@1to1pediatrics.com',
+    to,
+    subject,
+    html,
+    text,
+    replyTo
+  };
+
+  console.log('Sending email with payload:', {
+    ...emailPayload,
+    html: html.substring(0, 100) + '...',
+    text: text.substring(0, 100) + '...'
+  });
 
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -128,14 +147,7 @@ async function sendEmail({
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      from: 'noreply@1to1pediatrics.com',
-      to,
-      subject,
-      html,
-      text,
-      replyTo
-    })
+    body: JSON.stringify(emailPayload)
   });
 
   if (!response.ok) {
@@ -145,14 +157,12 @@ async function sendEmail({
       statusText: response.statusText,
       body: errorText
     });
-    let errorData;
-    try {
-      errorData = JSON.parse(errorText);
-    } catch {
-      errorData = { message: errorText };
-    }
-    throw new Error(`Failed to send email: ${errorData.message || response.statusText}`);
+    throw new Error(`Resend API failed: ${response.status} ${response.statusText} - ${errorText}`);
   }
+
+  const result = await response.json();
+  console.log('Email sent successfully:', result);
+  return result;
 }
 
 function buildPracticeEmail(fields: Record<string, string>) {
