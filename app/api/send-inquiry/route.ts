@@ -191,7 +191,7 @@ async function sendEmail({
   return result;
 }
 
-function buildPracticeEmail(fields: any) {
+function buildPracticeEmail(fields: Record<string, string | undefined>) {
   try {
     const {
       parentName,
