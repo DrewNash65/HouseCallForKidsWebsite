@@ -191,33 +191,36 @@ async function sendEmail({
   return result;
 }
 
-function buildPracticeEmail(fields: Record<string, string>) {
-  const {
-    parentName,
-    phoneNumber,
-    email,
-    patientName,
-    dateOfBirth,
-    californiaResident,
-    concerns,
-    afterHours,
-    questions,
-    pcpName,
-    pcpPhone,
-    pcpFax
-  } = fields;
+function buildPracticeEmail(fields: any) {
+  try {
+    const {
+      parentName,
+      phoneNumber,
+      email,
+      patientName,
+      dateOfBirth,
+      californiaResident,
+      concerns,
+      afterHours,
+      questions,
+      pcpName,
+      pcpPhone,
+      pcpFax
+    } = fields;
 
-  return `
+    console.log('Building practice email with fields:', fields);
+
+    const emailContent = `
 NEW PATIENT INQUIRY - HouseCall for Kids Virtual Pediatric Urgent Care
 
 PARENT/GUARDIAN INFORMATION:
-• Name: ${parentName}
-• Email: ${email}
-• Phone: ${phoneNumber}
+• Name: ${parentName || 'Not provided'}
+• Email: ${email || 'Not provided'}
+• Phone: ${phoneNumber || 'Not provided'}
 
 PATIENT INFORMATION:
-• Name: ${patientName}
-• Date of Birth: ${dateOfBirth}
+• Name: ${patientName || 'Not provided'}
+• Date of Birth: ${dateOfBirth || 'Not provided'}
 • Located in California: ${californiaResident === 'yes' ? 'Yes' : 'No'}
 
 PRIMARY CARE PROVIDER:
@@ -226,7 +229,7 @@ PRIMARY CARE PROVIDER:
 • PCP Fax: ${pcpFax || 'Not provided'}
 
 INQUIRY DETAILS:
-• Concerns: ${concerns}
+• Concerns: ${concerns || 'Not provided'}
 • Interested in After-Hours: ${afterHours || 'No'}
 • Has Practice Questions: ${questions || 'No'}
 
@@ -238,7 +241,14 @@ SUBMISSION DETAILS:
 ---
 This is an automated message from your HouseCall for Kids website inquiry form.
 Patient is reserving a spot for the Early January 2026 launch.
-  `.trim();
+    `.trim();
+
+    console.log('Practice email content built successfully');
+    return emailContent;
+  } catch (error) {
+    console.error('Error building practice email:', error);
+    throw new Error(`Failed to build practice email: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 function buildConfirmationEmail({
@@ -252,12 +262,15 @@ function buildConfirmationEmail({
   dateOfBirth: string;
   concerns: string;
 }) {
-  return `
+  try {
+    console.log('Building confirmation email for:', { parentName, patientName });
+    
+    const emailContent = `
 Thank you for your inquiry - HouseCall for Kids
 
-Dear ${parentName},
+Dear ${parentName || 'Parent/Guardian'},
 
-Thank you for your interest in HouseCall for Kids! We've received your inquiry for ${patientName} and are excited to connect with you.
+Thank you for your interest in HouseCall for Kids! We've received your inquiry for ${patientName || 'your child'} and are excited to connect with you.
 
 WHAT HAPPENS NEXT:
 • We'll contact you soon about our Early January 2026 launch
@@ -265,9 +278,9 @@ WHAT HAPPENS NEXT:
 • We'll provide information about scheduling and our OpenEMR patient portal
 
 YOUR INQUIRY DETAILS:
-• Patient: ${patientName}
-• Date of Birth: ${dateOfBirth}
-• Concerns: ${concerns}
+• Patient: ${patientName || 'Not provided'}
+• Date of Birth: ${dateOfBirth || 'Not provided'}
+• Concerns: ${concerns || 'Not provided'}
 
 IMPORTANT REMINDERS:
 • Our practice launches Early January 2026
@@ -291,5 +304,12 @@ A division of 1-to-1 Pediatrics
 ---
 This is an automated confirmation. Please do not reply to this email.
 For questions, we'll contact you directly soon.
-  `.trim();
+    `.trim();
+
+    console.log('Confirmation email content built successfully');
+    return emailContent;
+  } catch (error) {
+    console.error('Error building confirmation email:', error);
+    throw new Error(`Failed to build confirmation email: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
