@@ -50,7 +50,7 @@ export default function AboutPage() {
 
       <section className="mx-auto mt-16 flex max-w-6xl flex-col gap-12 lg:flex-row lg:items-center">
         <Image
-          src="/images/dr-nash-bass.jpg"
+          src="/images/Dr_Nash_New.png"
           alt="Dr. Andrew Nash headshot"
           width={540}
           height={540}
