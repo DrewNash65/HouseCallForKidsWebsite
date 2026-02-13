@@ -1,6 +1,6 @@
 export function HowItWorks() {
   const steps = [
-    "Pre-register by filling out the form below to set up your patient portal (all children can be under one portal account), OR go directly to our Schedule page to select an available appointment time.",
+    "Register by filling out the form below to set up your patient portal (all children can be under one portal account), OR go directly to our Schedule page to select an available appointment time.",
     "You will be sent secure links to complete registration forms, login credentials for the patient portal and a secure link to pay a $50 deposit to secure your appointment.",
     "When you would like an appointment, either log into the patient portal and select a time, or use our Schedule page directly to book available slots.",
     "Just prior to your appointment time, log in to the portal and click on the telehealth icon to begin your visit.",

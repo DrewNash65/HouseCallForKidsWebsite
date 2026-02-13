@@ -101,7 +101,7 @@ export default function AboutPage() {
             family’s needs together.
           </p>
           <a href="/#inquiry" className="btn-pill-primary mt-6 inline-flex">
-            Pre-register Your Child
+            Register Your Child
           </a>
         </div>
       </section>

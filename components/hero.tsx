@@ -11,7 +11,7 @@ export function Hero() {
       />
       <div className="mx-auto grid max-w-6xl gap-12 px-6 pb-20 pt-24 lg:grid-cols-[1.15fr,0.85fr] lg:px-10 lg:pb-24 lg:pt-28">
         <div className="flex flex-col justify-center">
-          <span className="badge-pill text-white/90">New • Launching Early 2026</span>
+          <span className="badge-pill text-white/90">Now Open • Accepting Patients</span>
           <h1 className="mt-6 font-heading text-4xl leading-tight text-white sm:text-5xl">
             Pediatric urgent care that feels like a house call.
           </h1>
@@ -21,7 +21,7 @@ export function Hero() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link href="#inquiry" className="btn-pill-primary">
-              Reserve Early Access
+              Schedule or Register
             </Link>
             <Link href="/about" className="btn-pill-secondary">
               Meet Dr. Nash

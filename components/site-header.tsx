@@ -61,7 +61,7 @@ export function SiteHeader() {
             href="/#inquiry"
             className="ml-4 inline-flex items-center rounded-full bg-brand-base/20 px-4 py-2 text-sm font-semibold text-teal-50 ring-1 ring-brand-base/40 transition hover:-translate-y-0.5 hover:bg-brand-base/30"
           >
-            Pre-Register as a Patient
+            Register as a Patient
           </Link>
         </nav>
 
@@ -108,7 +108,7 @@ export function SiteHeader() {
             onClick={() => setOpen(false)}
             className="btn-pill-primary mt-1 text-center"
           >
-            Pre-Register as a Patient
+            Register as a Patient
           </Link>
         </div>
       </div>

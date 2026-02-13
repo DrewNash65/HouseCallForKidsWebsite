@@ -35,7 +35,7 @@ export default function HomePage() {
       <section className="mx-auto mt-24 max-w-6xl px-6 lg:px-10">
         <div className="flex flex-col gap-10 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-gentle backdrop-blur-xl lg:flex-row lg:items-center">
           <Image
-            src="/images/dr-nash-bass.jpg"
+            src="/images/Dr_Nash_New.png"
             alt="Andrew L. Nash, MD FAAP smiling"
             width={420}
             height={420}

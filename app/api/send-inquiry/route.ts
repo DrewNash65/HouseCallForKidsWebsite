@@ -7,8 +7,13 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: Request) {
+  console.log('=== NEW INQUIRY SUBMISSION ===');
+  console.log('Timestamp:', new Date().toISOString());
+  console.log('Request URL:', request.url);
+  
   try {
     const body = await request.json();
+    console.log('Request body received:', Object.keys(body));
 
     const {
       parentName,
@@ -26,20 +31,36 @@ export async function POST(request: Request) {
       pcpFax
     } = body;
 
-    if (!parentName || !phoneNumber || !email || !patientName || !dateOfBirth || !concerns) {
-      return corsResponse(400, { error: 'Missing required fields' });
+    // Enhanced validation with detailed error messages
+    const missingFields = [];
+    if (!parentName?.trim()) missingFields.push('parentName');
+    if (!phoneNumber?.trim()) missingFields.push('phoneNumber');
+    if (!email?.trim()) missingFields.push('email');
+    if (!patientName?.trim()) missingFields.push('patientName');
+    if (!dateOfBirth?.trim()) missingFields.push('dateOfBirth');
+    if (!concerns?.trim()) missingFields.push('concerns');
+
+    if (missingFields.length > 0) {
+      console.log('❌ Missing required fields:', missingFields);
+      return corsResponse(400, { 
+        error: `Missing required fields: ${missingFields.join(', ')}`,
+        missingFields 
+      });
     }
 
     if (!emailRegex.test(email)) {
+      console.log('❌ Invalid email format:', email);
       return corsResponse(400, { error: 'Invalid email format' });
     }
 
     if (californiaResident !== 'yes') {
+      console.log('❌ Non-California resident:', californiaResident);
       return corsResponse(400, {
-        error:
-          'At this time, we only serve patients located in California. Please check back if our service area expands.'
+        error: 'At this time, we only serve patients located in California. Please check back if our service area expands.'
       });
     }
+
+    console.log('✅ Validation passed for:', { parentName, email, patientName });
 
     const practiceEmailContent = buildPracticeEmail({
       parentName,
@@ -64,44 +85,86 @@ export async function POST(request: Request) {
       concerns
     });
 
+    // Email sending with individual error handling
+    let practiceEmailSuccess = false;
+    let confirmationEmailSuccess = false;
+    const emailErrors: string[] = [];
+
     try {
-      console.log('Attempting to send practice email...');
+      console.log('📧 Attempting to send practice notification email...');
       const practiceEmailResult = await sendEmail({
-        to: ['ADHD@1to1Pediatrics.com'],
+        to: ['housecallforkids@gmail.com'],
         subject: `New Patient Inquiry: ${patientName}`,
         text: practiceEmailContent,
         html: practiceEmailContent.replace(/\n/g, '<br>'),
         replyTo: email
       });
-      console.log('Practice email sent successfully:', practiceEmailResult);
+      console.log('✅ Practice email sent successfully:', practiceEmailResult.id);
+      practiceEmailSuccess = true;
+      
+      // Add 5 second delay to prevent Gmail rate limiting while staying under Vercel timeout
+      console.log('⏱️  Adding 5 second delay before confirmation email...');
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    } catch (practiceEmailError) {
+      const errorMsg = `Practice email failed: ${practiceEmailError instanceof Error ? practiceEmailError.message : 'Unknown error'}`;
+      console.error('❌ Practice email error:', errorMsg);
+      emailErrors.push(errorMsg);
+    }
 
-      console.log('Attempting to send confirmation email...');
+    try {
+      console.log('📧 Attempting to send confirmation email...');
       const confirmationEmailResult = await sendEmail({
         to: [email],
-        subject: 'Your Inquiry Confirmation - HouseCall for Kids',
+        subject: 'Welcome to HouseCall for Kids - We received your inquiry!',
         text: confirmationEmailContent,
         html: confirmationEmailContent.replace(/\n/g, '<br>'),
-        replyTo: 'HouseCallForKids@Gmail.com'
+        replyTo: 'contact@housecallforkids.com'
       });
-      console.log('Confirmation email sent successfully:', confirmationEmailResult);
-    } catch (emailError) {
-      console.error('Email sending failed:', emailError);
+      console.log('✅ Confirmation email sent successfully:', confirmationEmailResult.id);
+      confirmationEmailSuccess = true;
+    } catch (confirmationEmailError) {
+      const errorMsg = `Confirmation email failed: ${confirmationEmailError instanceof Error ? confirmationEmailError.message : 'Unknown error'}`;
+      console.error('❌ Confirmation email error:', errorMsg);
+      emailErrors.push(errorMsg);
+    }
+
+    // Handle partial failures
+    if (!practiceEmailSuccess && !confirmationEmailSuccess) {
+      console.log('🚫 Both emails failed');
       return corsResponse(500, {
-        error: 'Failed to send emails',
-        details: emailError instanceof Error ? emailError.message : 'Unknown email error'
+        error: 'Failed to send emails. Please try again or contact us directly.',
+        details: emailErrors.join(' | '),
+        troubleshooting: 'This may be a temporary issue. Please try again in a few minutes.'
       });
     }
 
+    if (!practiceEmailSuccess || !confirmationEmailSuccess) {
+      console.log('⚠️  Partial email failure');
+      // Still return success but log the issue
+      const warning = emailErrors.join(' | ');
+      console.log('Warning:', warning);
+    }
+
+    console.log('✅ Inquiry submission completed successfully');
     return corsResponse(200, {
       success: true,
       message: 'Inquiry submitted successfully',
-      id: Date.now().toString()
+      id: Date.now().toString(),
+      emailStatus: {
+        practiceNotification: practiceEmailSuccess,
+        confirmationEmail: confirmationEmailSuccess,
+        ...(emailErrors.length > 0 && { warnings: emailErrors })
+      }
     });
+
   } catch (error) {
-    console.error('Inquiry submission error:', error);
+    console.error('❌ Critical error in inquiry submission:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    
     return corsResponse(500, {
       error: 'Failed to submit inquiry. Please try again or contact us directly.',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: error instanceof Error ? error.message : 'Unknown error',
+      timestamp: new Date().toISOString()
     });
   }
 }
@@ -127,49 +190,128 @@ async function sendEmail({
   html: string;
   replyTo?: string;
 }) {
-  const apiKey = process.env.RESEND_API_KEY;
-  console.log('API Key available:', !!apiKey, 'Length:', apiKey?.length);
-  console.log('API Key first 10 chars:', apiKey?.substring(0, 10));
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  
+  console.log('=== RESEND API DEBUG INFO ===');
+  console.log('API Key available:', !!apiKey);
+  console.log('API Key length:', apiKey?.length || 0);
+  console.log('API Key format check:', apiKey?.startsWith('re_') ? 'VALID' : 'INVALID');
+  console.log('Environment details:', {
+    NODE_ENV: process.env.NODE_ENV,
+    VERCEL_ENV: process.env.VERCEL_ENV,
+    timestamp: new Date().toISOString()
+  });
   
   if (!apiKey) {
-    throw new Error('RESEND_API_KEY is not configured');
+    throw new Error('RESEND_API_KEY environment variable is missing or empty');
+  }
+
+  if (!apiKey.startsWith('re_')) {
+    throw new Error('RESEND_API_KEY appears to be invalid (should start with "re_")');
   }
 
   const emailPayload = {
-    from: 'noreply@1to1pediatrics.com',
+    from: 'noreply@housecallforkids.com',
     to,
     subject,
     html,
     text,
-    replyTo
+    ...(replyTo && { replyTo })
   };
 
-  console.log('Sending email to Resend API:', {
-    to,
-    subject,
-    from: emailPayload.from
-  });
+  console.log('=== SENDING EMAIL ===');
+  console.log('Recipients:', to);
+  console.log('Subject:', subject);
+  console.log('From:', emailPayload.from);
+  console.log('Reply-to:', replyTo || 'none');
 
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(emailPayload)
-  });
+  // Retry logic for better reliability
+  const maxRetries = 3;
+  let lastError: Error | null = null;
 
-  console.log('Resend API response status:', response.status, response.statusText);
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`Attempt ${attempt}/${maxRetries} - Calling Resend API...`);
+      
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'HouseCallForKids/1.0'
+        },
+        body: JSON.stringify(emailPayload),
+        // Add timeout to prevent hanging requests
+        signal: AbortSignal.timeout(15000) // 15 seconds
+      });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Resend API Error Response:', errorText);
-    throw new Error(`Resend API failed: ${response.status} ${response.statusText} - ${errorText}`);
+      console.log(`Attempt ${attempt} - Response:`, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries())
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(`✅ SUCCESS on attempt ${attempt}:`, result);
+        return result;
+      } else {
+        // Handle different types of errors
+        const errorText = await response.text();
+        console.error(`❌ FAILED attempt ${attempt}:`, {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText
+        });
+
+        // Parse error details if possible
+        let errorDetails;
+        try {
+          errorDetails = JSON.parse(errorText);
+        } catch {
+          errorDetails = { message: errorText };
+        }
+
+        // Don't retry for certain errors
+        if (response.status === 401 || response.status === 403) {
+          throw new Error(`Authentication failed: ${errorDetails.message || errorText}`);
+        }
+
+        if (response.status === 422) {
+          throw new Error(`Invalid request: ${errorDetails.message || errorText}`);
+        }
+
+        lastError = new Error(`Resend API error (${response.status}): ${errorDetails.message || errorText}`);
+        
+        // Wait before retrying (exponential backoff)
+        if (attempt < maxRetries) {
+          const waitTime = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+          console.log(`⏱️  Waiting ${waitTime}ms before retry...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+      }
+    } catch (error) {
+      console.error(`❌ EXCEPTION on attempt ${attempt}:`, error);
+      
+      if (error instanceof Error && error.name === 'TimeoutError') {
+        lastError = new Error('Request timed out after 15 seconds');
+      } else if (error instanceof Error && error.message.includes('Authentication failed')) {
+        throw error; // Don't retry auth errors
+      } else {
+        lastError = error instanceof Error ? error : new Error('Unknown error occurred');
+      }
+
+      if (attempt < maxRetries) {
+        const waitTime = Math.pow(2, attempt) * 1000;
+        console.log(`⏱️  Waiting ${waitTime}ms before retry...`);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+      }
+    }
   }
 
-  const result = await response.json();
-  console.log('Resend API success result:', result);
-  return result;
+  // If we get here, all attempts failed
+  console.error('🚫 All retry attempts failed');
+  throw lastError || new Error('Failed to send email after multiple attempts');
 }
 
 function buildPracticeEmail(fields: Record<string, string | undefined>) {
@@ -213,12 +355,12 @@ INQUIRY DETAILS:
 
 SUBMISSION DETAILS:
 • Submitted: ${new Date().toLocaleString()}
-• Practice Launch: Early January 2026
+• Practice Status: Now Active and Accepting Patients
 • Service Area: California (patients 17 years and under)
 
 ---
 This is an automated message from your HouseCall for Kids website inquiry form.
-Patient is reserving a spot for the Early January 2026 launch.
+Patient inquiry for virtual pediatric urgent care services.
   `.trim();
 }
 
@@ -234,43 +376,34 @@ function buildConfirmationEmail({
   concerns: string;
 }) {
   return `
-Thank you for your inquiry - HouseCall for Kids
+Thank you for reaching out to HouseCall for Kids!
 
 Dear ${parentName || 'Parent/Guardian'},
 
-Thank you for your interest in HouseCall for Kids! We've received your inquiry for ${patientName || 'your child'} and are excited to connect with you.
+We've received your inquiry for ${patientName || 'your child'} and are excited to help your family access convenient, caring pediatric urgent care.
 
-WHAT HAPPENS NEXT:
-• We'll contact you soon about our Early January 2026 launch
-• You'll be among the first families to access our virtual pediatric urgent care services
-• We'll provide information about scheduling and our OpenEMR patient portal
-
-YOUR INQUIRY DETAILS:
+YOUR INQUIRY:
 • Patient: ${patientName || 'Not provided'}
 • Date of Birth: ${dateOfBirth || 'Not provided'}
 • Concerns: ${concerns || 'Not provided'}
 
+WHAT HAPPENS NEXT:
+• Our team will contact you soon to schedule your virtual appointment
+• We'll provide detailed service information and scheduling options
+• You'll receive access to our patient portal
+
 IMPORTANT REMINDERS:
-• Our practice launches Early January 2026
-• We serve patients located in California (patients 17 years and under)
-• This is not emergency medical care
-• For medical emergencies, call 911 or visit your nearest emergency room
+• We serve families throughout California (patients 17 years and under)
+• For medical emergencies, please call 911 or visit your nearest emergency room
+• This confirmation is not medical advice
 
-SERVICE INFORMATION:
-• Virtual visits via secure video conferencing
-• Standard 15-minute visits: $150
-• Extended 30-minute visits: $250
-• Payment required at time of service (out-of-network for commercial insurance)
-• Conditions treated: URIs, ear infections, sinus infections, coughs, fever, plus behavioral/parenting concerns
-
-We're looking forward to serving your family!
+Thank you for choosing HouseCall for Kids. We look forward to caring for your family!
 
 Warm regards,
 The HouseCall for Kids Team
 A division of 1-to-1 Pediatrics
 
 ---
-This is an automated confirmation. Please do not reply to this email.
-For questions, we'll contact you directly soon.
+Questions? We'll be in touch soon with all the details.
   `.trim();
 }

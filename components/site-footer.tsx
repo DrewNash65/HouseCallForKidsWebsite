@@ -30,7 +30,7 @@ export function SiteFooter() {
         </div>
         <div>
           <h4 className="font-heading text-base text-white">Stay In Touch</h4>
-          <p className="mt-3 text-slate-400">Receive gentle parenting tips and launch updates.</p>
+          <p className="mt-3 text-slate-400">Receive gentle parenting tips and practice updates.</p>
           <form className="mt-4 flex gap-2">
             <label htmlFor="newsletter" className="sr-only">
               Email address

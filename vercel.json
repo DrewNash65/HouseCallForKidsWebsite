@@ -7,14 +7,5 @@
     "app/api/**/*.ts": {
       "maxDuration": 30
     }
-  },
-  "env": {
-    "RESEND_API_KEY": "REPLACE_WITH_RESEND_API_KEY",
-    "NODE_ENV": "production"
-  },
-  "build": {
-    "env": {
-      "RESEND_API_KEY": "REPLACE_WITH_RESEND_API_KEY"
-    }
   }
 }

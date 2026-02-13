@@ -39,23 +39,71 @@ export function InquirySection() {
     setMessage('');
 
     try {
+      console.log('🚀 Submitting inquiry form...');
+      
       const response = await fetch('/api/send-inquiry', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({ ...payload, submittedAt: new Date().toISOString() })
       });
 
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || 'Something went wrong. Please try again.');
+      console.log('📡 API Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error('❌ Failed to parse response as JSON:', parseError);
+        throw new Error('Server returned invalid response. Please try again.');
       }
 
-      setStatus('success');
-      setMessage("Thank you! We'll share launch details and gentle care tips soon.");
+      if (!response.ok) {
+        console.error('❌ API Error Response:', data);
+        
+        // Handle specific error types
+        if (response.status === 404) {
+          throw new Error('Service temporarily unavailable. Please try again in a few minutes.');
+        } else if (response.status === 500) {
+          throw new Error(data.details || data.error || 'Server error. Please try again or contact us directly.');
+        } else {
+          throw new Error(data.error || data.message || 'Something went wrong. Please try again.');
+        }
+      }
+
+      console.log('✅ Form submission successful:', data);
+
+      // Handle partial success with warnings
+      if (data.emailStatus && (!data.emailStatus.practiceNotification || !data.emailStatus.confirmationEmail)) {
+        console.warn('⚠️  Partial email delivery:', data.emailStatus);
+        setStatus('success');
+        setMessage("Thank you! Your inquiry was submitted successfully. We'll contact you soon to schedule your appointment.");
+      } else {
+        setStatus('success');
+        setMessage("Thank you! We'll contact you soon to schedule your appointment and share gentle care tips.");
+      }
+      
       form.reset();
+      
     } catch (error) {
+      console.error('❌ Form submission error:', error);
+      
       setStatus('error');
-      setMessage(error instanceof Error ? error.message : 'Something went wrong.');
+      
+      // Provide helpful error messages based on error type
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        setMessage('Network error. Please check your connection and try again.');
+      } else if (error instanceof Error) {
+        setMessage(error.message);
+      } else {
+        setMessage('Something went wrong. Please try again or contact us directly at HouseCallForKids@Gmail.com');
+      }
     }
   }
 
@@ -63,12 +111,12 @@ export function InquirySection() {
     <section id="inquiry" className="mx-auto mt-24 max-w-6xl px-6 lg:px-10">
       <div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 shadow-gentle backdrop-blur-xl md:px-10">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="badge-pill">Pre-register your child</span>
+          <span className="badge-pill">Register your child</span>
           <h2 className="mt-4 font-heading text-3xl text-white sm:text-4xl">
             Set up your family portal or schedule directly.
           </h2>
           <p className="mt-4 text-base text-slate-200">
-            Pre-register to set up your patient portal for each of your children (all children can be under one portal account). We&apos;ll send you launch details and gentle care tips.
+            Set up your patient portal for each of your children (all children can be under one portal account). We&apos;ll send you scheduling information and gentle care tips.
           </p>
           <p className="mt-3 text-base text-slate-200">
             <strong>Alternative:</strong> New and existing patients can go directly to our <a href="/schedule" className="text-brand-light hover:underline font-semibold">Schedule page</a> to select an available appointment time. After booking, you&apos;ll receive links to register for the practice and pay your $50 deposit to confirm your appointment.
