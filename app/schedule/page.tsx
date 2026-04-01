@@ -20,7 +20,19 @@ export default function SchedulePage() {
               Please select an available time slot below. A $50 deposit is required to confirm your appointment.
             </p>
           </div>
-          
+
+          <div className="mb-6 rounded-2xl border border-amber-400/40 bg-amber-400/10 p-5 text-sm text-slate-200">
+            <p className="font-semibold text-amber-300 mb-2">Are you a new patient?</p>
+            <p>
+              When the scheduling form asks whether your child is a <strong className="text-white">new patient</strong>, please answer{" "}
+              <strong className="text-white">&ldquo;Yes&rdquo;</strong> if your child has not previously been seen by{" "}
+              <strong className="text-white">HouseCall For Kids</strong> — even if your child has been seen by one of our
+              providers at another practice. Our system can only locate existing records for patients who
+              were previously treated under HouseCall For Kids. If your child has not been seen here before,
+              selecting &ldquo;New Patient&rdquo; ensures your information is entered correctly.
+            </p>
+          </div>
+
           <div className="rounded-2xl overflow-hidden border border-white/10 bg-white/5">
             <iframe
               width="100%"

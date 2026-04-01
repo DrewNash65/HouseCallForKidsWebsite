@@ -111,15 +111,21 @@ export function InquirySection() {
     <section id="inquiry" className="mx-auto mt-24 max-w-6xl px-6 lg:px-10">
       <div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-12 shadow-gentle backdrop-blur-xl md:px-10">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="badge-pill">Register your child</span>
+          <span className="badge-pill">Pre-Registration</span>
           <h2 className="mt-4 font-heading text-3xl text-white sm:text-4xl">
-            Set up your family portal or schedule directly.
+            Submit your child&apos;s information to the practice.
           </h2>
           <p className="mt-4 text-base text-slate-200">
-            Set up your patient portal for each of your children (all children can be under one portal account). We&apos;ll send you scheduling information and gentle care tips.
+            Use this form to register your child&apos;s basic patient information with our practice (all children can be registered under one family account). This form is for registration purposes only — it is <strong className="text-white">not</strong> intended for medical questions, symptom reports, or urgent concerns.
           </p>
-          <p className="mt-3 text-base text-slate-200">
-            <strong>Alternative:</strong> New and existing patients can go directly to our <a href="/schedule" className="text-brand-light hover:underline font-semibold">Schedule page</a> to select an available appointment time. After booking, you&apos;ll receive links to register for the practice and pay your $50 deposit to confirm your appointment.
+        </div>
+
+        <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-amber-400/40 bg-amber-400/10 p-5 text-left">
+          <p className="font-semibold text-amber-200">Have a concern about your child&apos;s health?</p>
+          <p className="mt-2 text-sm text-slate-200">
+            This form cannot be used to ask medical questions or address clinical concerns. If your child is experiencing symptoms or you have an urgent question, please{' '}
+            <a href="/schedule" className="font-semibold text-amber-200 underline hover:text-white">visit our Schedule page</a>{' '}
+            to request an appointment time. Once your appointment is confirmed, you will receive all necessary intake forms to complete prior to the visit.
           </p>
         </div>
 
@@ -147,10 +153,11 @@ export function InquirySection() {
           </div>
 
           <TextareaField
-            label="How can we support your family?"
+            label="Additional registration notes (optional)"
             name="concerns"
-            placeholder="Share symptoms, questions, or goals for your child’s care."
+            placeholder="You may include preferred contact times, languages spoken, insurance information, or other details helpful for registration. Please do not share symptoms or medical questions here."
             className="md:col-span-2"
+            required={false}
           />
 
           <div className="md:col-span-2">
@@ -166,6 +173,7 @@ export function InquirySection() {
               <p className="font-semibold text-white">Gentle reminders</p>
               <ul className="mt-3 space-y-2">
                 <li>For emergencies, please call 911 or visit the nearest emergency department.</li>
+                <li>This form is for patient registration only — not for medical questions or health concerns. For those, please <a href="/schedule" className="font-semibold underline hover:text-white">schedule an appointment</a>.</li>
                 <li>We serve families across California with children from newborn to 17 years old.</li>
                 <li>Your information is protected under HIPAA and used only to coordinate care.</li>
               </ul>
@@ -268,18 +276,20 @@ function TextareaField({
   label,
   name,
   placeholder,
-  className
+  className,
+  required = true
 }: {
   label: string;
   name: string;
   placeholder?: string;
   className?: string;
+  required?: boolean;
 }) {
   return (
     <label className={`flex flex-col gap-2 text-sm font-medium text-slate-200 ${className ?? ''}`}>
       {label}
       <textarea
-        required
+        required={required}
         name={name}
         rows={5}
         placeholder={placeholder}
